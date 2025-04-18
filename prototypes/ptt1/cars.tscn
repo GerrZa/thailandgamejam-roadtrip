@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbj7xw2ehw2ni"]
+
+[ext_resource type="Texture2D" uid="uid://0nhs4ny4mxpu" path="res://icon.svg" id="1_2ii56"]
+
+[sub_resource type="GDScript" id="GDScript_2ii56"]
+script/source = "extends Node2D
+
+var acc = 0.0
+var x_input = 0
+var max_speed = 25
+
+var last_press = 0
+var last_dir = \"none\"
+
+var trigger_press_gap = 0.2
+
+var add_speed = 0.0
+const DEF_ADD_SPEED = 5.0
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _physics_process(delta: float) -> void:
+	position.x += acc + add_speed
+	last_press += delta
+	
+	position.x = clamp(position.x, 80, 230)
+	
+	x_input = Input.get_axis(\"ui_left\", \"ui_right\")
+	
+	if Input.is_action_just_pressed(\"ui_right\"):
+		if last_dir == \"right\" and last_press < trigger_press_gap:
+			add_speed = DEF_ADD_SPEED
+		last_dir = \"right\"
+		last_press = 0
+	elif Input.is_action_just_pressed(\"ui_left\"):
+		if last_dir == \"left\" and last_press < trigger_press_gap:
+			add_speed = -DEF_ADD_SPEED
+		last_dir = \"left\"
+		last_press = 0
+	
+	
+	acc += x_input * 0.1
+	
+	if abs(acc) < 1.2 and x_input == 0:
+		acc = lerp(acc, 0.0, 0.05)
+	
+	add_speed = lerp(add_speed, 0.0, 0.1)
+	
+	$Icon.rotation_degrees = 180 * (acc / max_speed)
+"
+
+[node name="Cars" type="Node2D"]
+script = SubResource("GDScript_2ii56")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.140625, 0.234375)
+texture = ExtResource("1_2ii56")
