@@ -11,12 +11,18 @@ config_version=5
 [application]
 
 config/name="thaigamejam_roadtrip"
-run/main_scene="uid://clwftphifl7yo"
+run/main_scene="uid://c68ddco5n8y3o"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=320
-window/size/viewport_height=240
+window/size/viewport_width=480
+window/size/viewport_height=320
+window/size/window_width_override=960
+window/size/window_height_override=640
 window/stretch/mode="viewport"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

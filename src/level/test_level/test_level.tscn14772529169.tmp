@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://c68ddco5n8y3o"]
+
+[ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="1_1yp2v"]
+
+[sub_resource type="GDScript" id="GDScript_tlnv8"]
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	for i in range(4):
+		spawn_obs(1)
+		
+		randomize()
+		
+		await get_tree().create_timer(randf_range(0.8, 2.7))
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _physics_process(delta: float) -> void:
+	#$obs.position.y += ($Car.main_speed + 80) * delta
+	for i in $obs.get_children():
+		i.position.y += ($Car.main_speed + 80) * delta
+		if i.position.y > 400:
+			i.queue_free()
+			spawn_obs(1)
+
+func spawn_obs(count):
+	for i in range(count):
+		randomize()
+		var new_sprite = Sprite2D.new()
+		new_sprite.texture = load(\"res://icon.svg\")
+		new_sprite.scale = Vector2(0.366,0.366)
+		new_sprite.position.y = randf_range(-10, -80)
+		new_sprite.position.x = randf_range(100, 480-100)
+		
+		get_node(\"obs\").add_child(new_sprite)
+	
+"
+
+[node name="TestLevel" type="Node2D"]
+script = SubResource("GDScript_tlnv8")
+
+[node name="Car" parent="." instance=ExtResource("1_1yp2v")]
+position = Vector2(240, 282)
+
+[node name="obs" type="Node2D" parent="."]

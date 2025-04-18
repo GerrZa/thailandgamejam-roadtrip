@@ -1,7 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://clwftphifl7yo"]
 
 [ext_resource type="PackedScene" uid="uid://bbj7xw2ehw2ni" path="res://prototypes/ptt1/cars.tscn" id="1_t7dni"]
-[ext_resource type="Texture2D" uid="uid://0nhs4ny4mxpu" path="res://icon.svg" id="2_k1841"]
+[ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="2_clgik"]
+[ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="2_k1841"]
 
 [sub_resource type="GDScript" id="GDScript_k1841"]
 script/source = "extends Node2D
@@ -42,7 +43,7 @@ func spawn_obs(count):
 		randomize()
 		var new_sprite = Sprite2D.new()
 		new_sprite.texture = load(\"res://icon.svg\")
-		new_sprite.scale = Vector2(0.266,0.266)
+		new_sprite.scale = Vector2(0.366,0.366)
 		new_sprite.position.y = randf_range(-10, -100)
 		new_sprite.position.x = randf_range(90,220)
 		
@@ -50,26 +51,8 @@ func spawn_obs(count):
 	
 "
 
-[sub_resource type="Shader" id="Shader_k1841"]
-code = "shader_type canvas_item;
-
-float findDistance(vec2 pos1, vec2 pos2){
-	return sqrt(pow(pos1.x-pos2.x,2) + pow(pos1.y-pos2.y,2));
-}
-
-void vertex() {
-	// Called for every vertex the material is visible on.
-}
-
-void fragment() {
-	if (findDistance(UV, vec2(0.5)) > 0.5){
-		COLOR = vec4(0);
-	}
-}
-"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_clgik"]
-shader = SubResource("Shader_k1841")
+shader = ExtResource("2_clgik")
 
 [node name="Level" type="Node2D"]
 script = SubResource("GDScript_k1841")
