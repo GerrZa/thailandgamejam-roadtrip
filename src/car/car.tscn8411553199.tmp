@@ -14,13 +14,14 @@ var x_input = 0.0
 
 var speed = 0.0
 var apply_speed = 0.0
-var acc = 9.5
+var acc = 9.0
 var move_toward_speed = 30.0
 const MAX_SPEED = 350.0
 
 @export var main_speed = 40;
 var main_speed_acc_cd = 0.0
 var DEF_MAIN_SPEED_CD = 0.5
+
 
 var debug_x_pos = 0.0
 
@@ -43,8 +44,8 @@ var hp = 3
 
 var invin = false
 
-@export var left_wall = 32.0
-@export var right_wall = 320-32.0
+@export var left_wall = 64.0
+@export var right_wall = 480-64.0
 
 func _ready() -> void:
 	#init sprite
@@ -78,9 +79,8 @@ func _physics_process(delta: float) -> void:
 	#acceleration
 	if Input.is_action_just_pressed(\"ui_up\") and main_speed_acc_cd < 0.0:
 		main_speed += 20
-		DEF_DASH_CD *= 0.95
-		acc += 0.5
-		acc = clamp(acc, 0.0, 18.0)
+		DEF_DASH_CD *= 0.9
+		acc += 0.75
 		$modulate_control/car_render.scale = Vector2(0.8, 1.2)
 		$camera_control.zoomin(clamp(1 + 0.01 * ((main_speed-20) / 20), 0.0, 1.3))
 		
@@ -110,12 +110,10 @@ func _physics_process(delta: float) -> void:
 	dash_cd -= delta
 	
 	#moving input
-	var new_acc = acc
-	#if invin:
-		#new_acc = max(acc, 15)
-	
 	x_input = Input.get_axis(\"ui_left\", \"ui_right\")
-	speed += x_input * new_acc
+	speed += x_input * acc
+	
+	dash_speed = lerp(dash_speed, 0.0, 0.1)
 	
 	speed = clamp(speed, -MAX_SPEED, MAX_SPEED)
 	if dash_duration > 0.0:
@@ -128,8 +126,10 @@ func _physics_process(delta: float) -> void:
 		speed = lerp(speed, 0.0, 0.0125 + (0.025 * abs(speed) / MAX_SPEED))
 	
 	dash_duration -= delta
+	
+	#print(\"apply speed: %3.3f | speed: %3.3f\" % [apply_speed, speed])
+	print(position.x - debug_x_pos)
 	debug_x_pos = position.x
-
 	
 	#wall detect
 	if position.x <= left_wall and apply_speed < 0.0 and invin == false:
@@ -140,8 +140,6 @@ func _physics_process(delta: float) -> void:
 		speed = -MAX_SPEED / 3
 	
 	position.x = clamp(position.x, left_wall, right_wall)
-	
-	print(new_acc)
 	
 	#rotate car
 	for s in $SubViewport/car_slice.get_children():
@@ -174,7 +172,6 @@ func hurt(damage):
 		
 		if hp <= 0:
 			dead()
-			get_tree().current_scene.get_node(\"Camera2D\").shake()
 			print(\"ded\")
 			return
 		
@@ -307,14 +304,12 @@ script/source = "extends Marker2D
 var y_off = 0.0
 var y_off_move = 0.0
 
-var def_y_off = 0.0
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	def_y_off = position.y
+	pass # Replace with function body.
 
 func _physics_process(delta: float) -> void:
-	position.y = def_y_off + y_off
+	position.y = -110.0 + y_off
 	
 	y_off_move -= 64 * delta
 	y_off += y_off_move
@@ -384,7 +379,7 @@ shape = SubResource("CapsuleShape2D_k527v")
 debug_color = Color(0.921815, 0.169969, 0.553005, 0.42)
 
 [node name="camera_control" type="Marker2D" parent="."]
-position = Vector2(0, -111)
+position = Vector2(0, -110)
 script = SubResource("GDScript_tf5ac")
 
 [node name="Camera2D" type="Camera2D" parent="camera_control"]

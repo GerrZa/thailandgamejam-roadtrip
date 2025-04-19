@@ -1,14 +1,408 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmhqt0spblavr"]
+[gd_scene load_steps=9 format=3 uid="uid://cmhqt0spblavr"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xvjpw"]
-size = Vector2(98, 56)
+[ext_resource type="Script" uid="uid://blirary3don7j" path="res://src/level/level.gd" id="1_6md2e"]
+[ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="1_sit3r"]
+[ext_resource type="Texture2D" uid="uid://vq6ab65vq4jc" path="res://asset/bg/ptt_bg.png" id="2_6phvn"]
+[ext_resource type="Script" uid="uid://dedg8xg0tpwfw" path="res://src/obs/regular_obs.gd" id="4_j8foc"]
+[ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="4_kp6mm"]
+[ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="5_6phvn"]
+[ext_resource type="Texture2D" uid="uid://bgf5nfgbhq1pp" path="res://asset/obs/ptt_sign.png" id="6_pess2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8foc"]
+radius = 7.0
+height = 108.0
 
 [node name="Level1" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_6md2e")
+
+[node name="main_ui" parent="." instance=ExtResource("5_6phvn")]
+
+[node name="bg" type="Parallax2D" parent="."]
+z_index = -99
+repeat_size = Vector2(0, 320)
+autoscroll = Vector2(0, 100)
+follow_viewport = false
+ignore_camera_scroll = true
+
+[node name="Icon" type="Sprite2D" parent="bg"]
+texture = ExtResource("2_6phvn")
+centered = false
 
 [node name="obs" type="Area2D" parent="."]
-position = Vector2(336, 6)
+position = Vector2(216, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="obs"]
-shape = SubResource("RectangleShape2D_xvjpw")
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs2" type="Area2D" parent="."]
+position = Vector2(90, -106)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs2"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs2"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs3" type="Area2D" parent="."]
+position = Vector2(138, -127)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs3"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs3"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs4" type="Area2D" parent="."]
+position = Vector2(139, -178)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs4"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs4"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs5" type="Area2D" parent="."]
+position = Vector2(140, -235)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs5"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs5"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs6" type="Area2D" parent="."]
+position = Vector2(225, -309)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs6"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs6"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs7" type="Area2D" parent="."]
+position = Vector2(81, -404)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs7"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs7"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs8" type="Area2D" parent="."]
+position = Vector2(210, -575)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs8"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs8"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs9" type="Area2D" parent="."]
+position = Vector2(150, -484)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs9"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs9"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs10" type="Area2D" parent="."]
+position = Vector2(78, -725)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs10"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs10"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs11" type="Area2D" parent="."]
+position = Vector2(110, -781)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs11"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs11"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs12" type="Area2D" parent="."]
+position = Vector2(215, -648)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs12"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs12"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs13" type="Area2D" parent="."]
+position = Vector2(216, -867)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs13"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs13"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs14" type="Area2D" parent="."]
+position = Vector2(90, -973)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs14"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs14"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs15" type="Area2D" parent="."]
+position = Vector2(138, -994)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs15"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs15"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs16" type="Area2D" parent="."]
+position = Vector2(139, -1045)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs16"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs16"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs17" type="Area2D" parent="."]
+position = Vector2(140, -1102)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs17"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs17"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs18" type="Area2D" parent="."]
+position = Vector2(225, -1153)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs18"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs18"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs19" type="Area2D" parent="."]
+position = Vector2(81, -1271)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs19"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs19"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs20" type="Area2D" parent="."]
+position = Vector2(210, -1434)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs20"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs20"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs21" type="Area2D" parent="."]
+position = Vector2(150, -1351)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs21"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs21"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs22" type="Area2D" parent="."]
+position = Vector2(78, -1596)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs22"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs22"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs23" type="Area2D" parent="."]
+position = Vector2(110, -1652)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs23"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs23"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="obs24" type="Area2D" parent="."]
+position = Vector2(212, -1495)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_j8foc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs24"]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_j8foc")
+
+[node name="PttSign" type="Sprite2D" parent="obs24"]
+position = Vector2(-3, -31)
+texture = ExtResource("6_pess2")
+
+[node name="Car" parent="." instance=ExtResource("1_sit3r")]
+position = Vector2(160, 271)
+
+[node name="ptt_border" type="Line2D" parent="."]
+points = PackedVector2Array(32, 0, 32, 320)
+width = 1.0
+
+[node name="ptt_border2" type="Line2D" parent="."]
+points = PackedVector2Array(288, 0, 288, 320)
+width = 1.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(160, 160)
+drag_left_margin = 1.0
+drag_right_margin = 1.0
+editor_draw_limits = true
+script = ExtResource("4_kp6mm")

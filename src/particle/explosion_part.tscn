@@ -6,6 +6,7 @@
 script/source = "extends Node2D
 
 func _ready() -> void:
+	add_to_group(\"move_along\")
 	$AnimatedSprite2D.connect(\"animation_finished\", func(): queue_free())
 "
 
