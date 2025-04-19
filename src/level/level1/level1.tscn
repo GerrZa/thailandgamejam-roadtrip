@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmhqt0spblavr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xvjpw"]
+size = Vector2(98, 56)
+
+[node name="Level1" type="Node2D"]
+y_sort_enabled = true
+
+[node name="obs" type="Area2D" parent="."]
+position = Vector2(336, 6)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="obs"]
+shape = SubResource("RectangleShape2D_xvjpw")
