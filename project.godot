@@ -8,11 +8,16 @@
 
 config_version=5
 
+[animation]
+
+warnings/check_invalid_track_paths=false
+
 [application]
 
 config/name="thaigamejam_roadtrip"
 run/main_scene="uid://c68ddco5n8y3o"
 config/features=PackedStringArray("4.4", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
 
 [display]
@@ -22,6 +27,13 @@ window/size/viewport_height=320
 window/size/window_width_override=960
 window/size/window_height_override=640
 window/stretch/mode="viewport"
+
+[layer_names]
+
+2d_physics/layer_1="player"
+2d_physics/layer_2="wall"
+2d_physics/layer_3="softobs"
+2d_physics/layer_4="hardobs"
 
 [rendering]
 

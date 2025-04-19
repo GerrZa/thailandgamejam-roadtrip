@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cvdjeuqi55t5a"]
+[gd_scene load_steps=12 format=3 uid="uid://cvdjeuqi55t5a"]
 
 [ext_resource type="Texture2D" uid="uid://wf26b7xbyu5f" path="res://asset/car/car_slice.png" id="1_iox4k"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="3_ikygv"]
@@ -36,8 +36,6 @@ var car_pos_vel = Vector2.ZERO
 
 var hp = 3
 
-var invin = false
-
 func _ready() -> void:
 	#init sprite
 	for i in range(13):
@@ -50,32 +48,28 @@ func _ready() -> void:
 		new_slice.hframes = 13
 		new_slice.flip_v = true
 		new_slice.frame = i
-	
-	$soft_hit.connect(\"area_entered\", func(area): hurt(1))
-	$hard_hit.connect(\"area_entered\", func(area): hurt(3))
+		
 
 func _physics_process(delta: float) -> void:
 	
-	if Input.is_action_just_pressed(\"ui_down\"):
-		hurt(1)
 	
 	#car render
 	car_pos += car_pos_vel * delta
 	if car_pos.y < 0.0:
 		car_pos_vel.y += 160 * delta
 	
-	$modulate_control/car_render.position = car_pos
+	$car_render.position = car_pos
 	car_pos.y = clamp(car_pos.y, -INF, 0.0)
 	
-	$modulate_control/car_render.scale = lerp($modulate_control/car_render.scale, Vector2(1,1), 0.1)
-	$modulate_control/car_render.material.set_shader_parameter(\"progress\", clamp(dash_cd/DEF_DASH_CD, 0.0, 1.0))
+	$car_render.scale = lerp($car_render.scale, Vector2(1,1), 0.1)
+	$car_render.material.set_shader_parameter(\"progress\", clamp(dash_cd/DEF_DASH_CD, 0.0, 1.0))
 	
 	#acceleration
 	if Input.is_action_just_pressed(\"ui_up\"):
 		main_speed += 20
 		DEF_DASH_CD *= 0.9
 		acc += 0.75
-		$modulate_control/car_render.scale = Vector2(0.8, 1.2)
+		$car_render.scale = Vector2(0.8, 1.2)
 	
 	#dash
 	if Input.is_action_just_pressed(\"ui_right\"):
@@ -111,19 +105,19 @@ func _physics_process(delta: float) -> void:
 		apply_speed = speed
 	position.x += apply_speed * delta
 	
-	if x_input == 0:
-		speed = lerp(speed, 0.0, 0.0125 + (0.025 * abs(speed) / MAX_SPEED))
+	#if abs(speed) < 125 and x_input == 0:
+	speed = lerp(speed, 0.0, 0.05)
 	
 	dash_duration -= delta
 	
-	#print(\"apply speed: %3.3f | speed: %3.3f\" % [apply_speed, speed])
+	print(\"apply speed: %3.3f | speed: %3.3f\" % [apply_speed, speed])
 	
 	#rotate car
 	for s in $SubViewport/car_slice.get_children():
 		s.rotation_degrees = lerp(s.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4)
 
 func dash():
-	$modulate_control/car_render.scale = Vector2(1.4,0.8)
+	$car_render.scale = Vector2(1.4,0.8)
 	
 	match press_dir:
 		\"right\":
@@ -141,30 +135,12 @@ func dash():
 
 
 func hurt(damage):
-	print(\"hurt\")
+	hp -= damage
 	
-	if invin == false:
-		hp -= damage
-		
-		if hp <= 0:
-			dead()
-			print(\"ded\")
-			return
-		
-		invin = true
-		$modulate_control/car_render/AnimationPlayer.play(\"blink\")
-		await $modulate_control/car_render/AnimationPlayer.animation_finished
-		invin = false
-		
-	
+	if hp <= 0:
+		dead()
 
 func dead():
-	var ded_part = load(\"res://src/particle/explosion_part.tscn\")
-	var part_ins = ded_part.instantiate()
-	
-	get_tree().current_scene.add_child(part_ins)
-	part_ins.global_position = global_position
-	
 	queue_free()
 "
 
@@ -183,7 +159,6 @@ uniform float width;
 uniform float height;
 
 uniform float progress : hint_range(0.0, 1.0, 0.1) = 1.0;
-uniform float redIntense : hint_range(0.0, 1.0, 0.1) = 0.0;
 
 uniform vec4 outlineColor : source_color;
 
@@ -199,13 +174,9 @@ void fragment() {
 		COLOR = mix(COLOR, vec4(1,1,1,0.3), 0.2 + (0.3 * progress));
 	}
 	
-	COLOR = mix(COLOR, vec4(1,0.25,0.25,COLOR.a), 0.5 * redIntense);
-	
 	if (texture(TEXTURE, UV + vec2(pixelSizeX, 0.0)).a > 0.0 || texture(TEXTURE, UV + vec2(-pixelSizeX, 0.0)).a > 0.0 ||texture(TEXTURE, UV + vec2(0.0, pixelSizeY)).a > 0.0 ||texture(TEXTURE, UV + vec2(0.0, -pixelSizeY)).a > 0.0){
-		float newAlpha = max(max(texture(TEXTURE, UV + vec2(pixelSizeX, 0.0)).a, texture(TEXTURE, UV + vec2(-pixelSizeX, 0.0)).a), max(texture(TEXTURE, UV + vec2(0.0, pixelSizeY)).a, texture(TEXTURE, UV + vec2(0.0, -pixelSizeY)).a));
-		
-		if (COLOR.a == 0.0){
-			COLOR = vec4(outlineColor.r, outlineColor.g, outlineColor.b, newAlpha);
+		if (COLOR.a < 0.5){
+			COLOR = outlineColor;
 		}
 	}
 }
@@ -220,50 +191,11 @@ void fragment() {
 shader = SubResource("Shader_ikygv")
 shader_parameter/width = 48.0
 shader_parameter/height = 48.0
-shader_parameter/progress = 1.0
-shader_parameter/redIntense = 1.0
+shader_parameter/progress = 0.0
 shader_parameter/outlineColor = Color(0, 0, 0, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tmscv"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="Animation" id="Animation_ikygv"]
-resource_name = "blink"
-length = 2.0
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("modulate_control:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_tf5ac"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("modulate_control:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_tf5ac"]
-_data = {
-&"RESET": SubResource("Animation_tf5ac"),
-&"blink": SubResource("Animation_ikygv")
-}
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k527v"]
 shader = ExtResource("3_tf5ac")
@@ -295,18 +227,9 @@ offset = Vector2(0, -4)
 
 [node name="car_slice" type="Node2D" parent="SubViewport"]
 
-[node name="modulate_control" type="Node2D" parent="."]
-
-[node name="car_render" type="Sprite2D" parent="modulate_control"]
+[node name="car_render" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_ikygv")
-scale = Vector2(1.00275, 1)
 texture = SubResource("ViewportTexture_tmscv")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="modulate_control/car_render"]
-root_node = NodePath("../../..")
-libraries = {
-&"": SubResource("AnimationLibrary_tf5ac")
-}
 
 [node name="car_shadow" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 0.219608)
@@ -317,15 +240,11 @@ scale = Vector2(0.171875, 0.257813)
 texture = ExtResource("3_ikygv")
 
 [node name="soft_hit" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="soft_hit"]
 shape = SubResource("CapsuleShape2D_tf5ac")
 
 [node name="hard_hit" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hard_hit"]
 shape = SubResource("CapsuleShape2D_k527v")

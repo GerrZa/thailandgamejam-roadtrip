@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkjy81ih2t8bu"]
+
+[ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="1_h33wc"]
+[ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="2_pdhgm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7veb"]
+shader = ExtResource("1_h33wc")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ljhcr"]
+radius = 33.0606
+
+[node name="PttHardObs" type="Area2D"]
+collision_layer = 8
+collision_mask = 0
+
+[node name="Icon" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+material = SubResource("ShaderMaterial_l7veb")
+scale = Vector2(0.53125, 0.53125)
+texture = ExtResource("2_pdhgm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ljhcr")
+debug_color = Color(0.803688, 0.282129, 0.771993, 0.42)

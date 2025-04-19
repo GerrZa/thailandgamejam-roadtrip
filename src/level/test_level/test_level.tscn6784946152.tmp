@@ -5,8 +5,6 @@
 [sub_resource type="GDScript" id="GDScript_tlnv8"]
 script/source = "extends Node2D
 
-var soft_obs = preload(\"res://src/obs/ptt_soft_obs.tscn\")
-var hard_obs = preload(\"res://src/obs/ptt_hard_obs.tscn\")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,25 +21,22 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	#$obs.position.y += ($Car.main_speed + 80) * delta
-	if get_node_or_null(\"Car\"):
-		for i in get_tree().get_nodes_in_group(\"obs\"):
-			i.position.y += ($Car.main_speed + 80) * delta
-			if i.position.y > 400:
-				i.queue_free()
-				spawn_obs(1)
+	for i in $obs.get_children():
+		i.position.y += ($Car.main_speed + 80) * delta
+		if i.position.y > 400:
+			i.queue_free()
+			spawn_obs(1)
 
 func spawn_obs(count):
 	for i in range(count):
 		randomize()
-		var obs_type = [soft_obs, hard_obs]
-		var new_obs = obs_type.pick_random().instantiate()
+		var new_sprite = Sprite2D.new()
+		new_sprite.texture = load(\"res://icon.svg\")
+		new_sprite.scale = Vector2(0.366,0.366)
+		new_sprite.position.y = randf_range(-10, -80)
+		new_sprite.position.x = randf_range(100, 480-100)
 		
-		new_obs.position.y = randf_range(-10,-50)
-		new_obs.position.x = randf_range(50, 480-50)
-		
-		new_obs.add_to_group(\"obs\")
-		
-		add_child(new_obs)
+		get_node(\"obs\").add_child(new_sprite)
 	
 "
 
@@ -51,5 +46,7 @@ script = SubResource("GDScript_tlnv8")
 
 [node name="Car" parent="." instance=ExtResource("1_1yp2v")]
 position = Vector2(240, 268)
+
+[node name="Area2D" type="Area2D" parent="."]
 
 [node name="obs" type="Node2D" parent="."]
