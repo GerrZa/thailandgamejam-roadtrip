@@ -1,0 +1,169 @@
+[gd_scene load_steps=9 format=3 uid="uid://c1svtpi40gado"]
+
+[ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="1_5rqdl"]
+
+[sub_resource type="GDScript" id="GDScript_5rqdl"]
+script/source = "extends Node2D
+
+var t = 0.0
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _physics_process(delta: float) -> void:
+	t += delta
+	
+	if fmod(t, 1.0) > 0.5:
+		$retry.modulate = Color.WHITE
+	else:
+		$retry.modulate = Color(0,0,0,0)
+		
+	
+	if Input.is_key_pressed(KEY_ENTER):
+		Global.change_scene(Global.current_scene)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_eitcn"]
+font = ExtResource("1_5rqdl")
+font_size = 32
+font_color = Color(0.602903, 0.20568, 0.0616478, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5rqdl"]
+font = ExtResource("1_5rqdl")
+font_size = 8
+font_color = Color(0.22788, 0.1998, 0.27, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ajj15"]
+font = ExtResource("1_5rqdl")
+font_color = Color(0.674055, 0.632506, 0.739964, 1)
+
+[sub_resource type="Animation" id="Animation_5rqdl"]
+resource_name = "start"
+length = 5.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ded:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sorry:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("retry:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_eitcn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ded:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sorry:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("retry:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ajj15"]
+_data = {
+&"RESET": SubResource("Animation_eitcn"),
+&"start": SubResource("Animation_5rqdl")
+}
+
+[node name="DeadScene" type="Node2D"]
+script = SubResource("GDScript_5rqdl")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0, 0, 0, 1)
+
+[node name="ded" type="Label" parent="."]
+visible = false
+offset_top = 69.0
+offset_right = 320.0
+offset_bottom = 186.0
+text = "YOU'RE DEAD..."
+label_settings = SubResource("LabelSettings_eitcn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="sorry" type="Label" parent="."]
+visible = false
+offset_top = 93.0
+offset_right = 320.0
+offset_bottom = 210.0
+text = "sorry! :("
+label_settings = SubResource("LabelSettings_5rqdl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="retry" type="Label" parent="."]
+visible = false
+offset_top = 203.0
+offset_right = 320.0
+offset_bottom = 320.0
+text = "press [ENTER] to try again..."
+label_settings = SubResource("LabelSettings_ajj15")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ajj15")
+}
+autoplay = "start"

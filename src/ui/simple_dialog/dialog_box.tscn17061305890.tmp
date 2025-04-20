@@ -1,0 +1,172 @@
+[gd_scene load_steps=8 format=3 uid="uid://bnff0epxspqxa"]
+
+[ext_resource type="Texture2D" uid="uid://oeyagkx2opl3" path="res://asset/ui/dialog_nine_slice.png" id="1_scjo0"]
+[ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="2_jmgcx"]
+[ext_resource type="SpriteFrames" uid="uid://d2i3x1rk8ogy" path="res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres" id="3_gj2nl"]
+
+[sub_resource type="GDScript" id="GDScript_gj2nl"]
+script/source = "extends Node2D
+
+var fin_box_size = Vector2(80, 57)
+
+var box_anim_finish = false
+var text_anim_finish = false
+var text = \"Test\"
+var char_name = \"JOHN\"
+
+var float_vis_char = 0.0
+
+@export_enum(\"None\", \"test\") var when_finish_func : String
+
+func _ready() -> void:
+	print(when_finish_func)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"ui_accept\"):
+		if text_anim_finish == false:
+			skip_animation()
+		else:
+			new_dialog(\"[wave amp=40.0 freq=10.0 connected=0]HEY![/wave]\")
+
+func _physics_process(delta: float) -> void:
+	$dialog_box.size = lerp($dialog_box.size, fin_box_size, 0.1)
+	$dialog_box.position.y = -$dialog_box.size.y
+	$char.position.y = $dialog_box.position.y
+	$char_name.position = $dialog_box.position + Vector2(14,-3)
+	
+	if abs(fin_box_size.y - $dialog_box.size.y) < 0.1 and box_anim_finish == false:
+		$dialog_box.size = fin_box_size
+		box_anim_finish = true
+	
+	if box_anim_finish and text_anim_finish == false:
+		float_vis_char += 0.5
+		$dialog_box/RichTextLabel.visible_characters = ceil(float_vis_char)
+		$char.play(\"say\")
+	
+	if $dialog_box/RichTextLabel.visible_ratio >= 1.0:
+		text_anim_finish = true
+		$char.play(\"shut\")
+		
+	print($dialog_box/RichTextLabel.visible_characters)
+	#print(\"box anim: \" + var_to_str(box_anim_finish))
+	#print(\"text anim: \" + var_to_str(text_anim_finish))
+	#print(\"diff\" + var_to_str(fin_box_size.y - $dialog_box.size.y))
+
+func skip_animation():
+	$dialog_box.size = fin_box_size
+	$dialog_box/RichTextLabel.visible_ratio = 1.0
+	
+	box_anim_finish = true
+	text_anim_finish = true
+
+func new_dialog(text := \"no text\"):
+	$dialog_box/RichTextLabel.text = text
+	$dialog_box/RichTextLabel.visible_characters = 0.0
+	text_anim_finish = false
+
+func init(new_charname, new_text, char_spr : SpriteFrames):
+	text = new_text
+	char_name = new_charname
+	
+	$dialog_box.size.y = 8
+	$dialog_box.position.y = -8
+	$char_name.text = char_name
+	$dialog_box/RichTextLabel.text = text
+	$char.sprite_frames = char_spr
+	$char.play(\"shut\")
+	$char.frame = 0
+	
+	$dialog_box/RichTextLabel.visible_ratio = 0
+"
+
+[sub_resource type="Shader" id="Shader_gj2nl"]
+code = "shader_type canvas_item;
+
+uniform float width;
+uniform float height;
+
+uniform vec4 outlineColor : source_color;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	float pixelSizeX = 1.0 / width;
+	float pixelSizeY = 1.0 / height;
+
+	if (texture(TEXTURE, UV + vec2(-pixelSizeX, 0.0)).a > 0.0 || texture(TEXTURE, UV + vec2(0.0, -pixelSizeY)).a > 0.0){
+		if (COLOR.a < 0.5){
+			COLOR = outlineColor;
+		}
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wg6oo"]
+shader = SubResource("Shader_gj2nl")
+shader_parameter/width = 64.0
+shader_parameter/height = 16.0
+shader_parameter/outlineColor = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gj2nl"]
+font = ExtResource("2_jmgcx")
+font_size = 8
+font_color = Color(1, 0.92, 0.4, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 0.533333)
+
+[node name="DialogBox" type="Node2D"]
+script = SubResource("GDScript_gj2nl")
+
+[node name="dialog_box" type="NinePatchRect" parent="."]
+offset_top = -57.0
+offset_right = 80.0
+texture = ExtResource("1_scjo0")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="dialog_box"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 9.0
+offset_right = -7.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.47, 0.337617, 0.1645, 0.235294)
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/normal_font = ExtResource("2_jmgcx")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Lorem ipsum dolor sit amet consectetur adipiscing elit. "
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="char" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_wg6oo")
+position = Vector2(0, -57)
+sprite_frames = ExtResource("3_gj2nl")
+animation = &"say"
+
+[node name="char_name" type="Label" parent="."]
+offset_left = 10.0
+offset_top = -60.0
+offset_right = 80.0
+offset_bottom = -52.0
+text = "JOHN"
+label_settings = SubResource("LabelSettings_gj2nl")

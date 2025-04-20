@@ -1,0 +1,273 @@
+[gd_scene load_steps=14 format=3 uid="uid://rl1q161ux7p"]
+
+[ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="1_ywvy0"]
+[ext_resource type="Texture2D" uid="uid://vq6ab65vq4jc" path="res://asset/level/ptt_level/ptt_bg.png" id="2_qean1"]
+[ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="3_mm7o3"]
+[ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="4_3m6gi"]
+
+[sub_resource type="GDScript" id="GDScript_7k86c"]
+script/source = "extends Node2D
+
+var moving_scale = 2.5
+var moving_speed = 0.0
+
+@export var moving = false
+var test_seq = [
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"start\"
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Boris\",
+			\"text\":\"YOOOO dialog system!!!\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(80,80),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Dude\",
+			\"text\":\"STFU\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(180,120),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"delete_char\",
+			\"arg\":[\"Dude\"]
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Boris\",
+			\"text\":\"Fuck you\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(80,80),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":self,
+			\"func\":\"set_ready\",
+			\"arg\":[]
+		}
+	]
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	#ungroupping all moving object
+	for i in $move_along.get_children():
+		i.add_to_group(\"move_along\")
+		i.reparent(self)
+	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _physics_process(delta: float) -> void:
+	
+	if get_node_or_null(\"Car\"):
+		moving_speed = $Car.main_speed
+	else:
+		moving_scale = lerp(moving_scale, 0.0, 0.03)
+	
+	$bg.autoscroll = Vector2(0, moving_speed * moving_scale)
+	
+	if moving:
+		for o in get_tree().get_nodes_in_group(\"move_along\"):
+			o.position.y += moving_speed * delta * moving_scale
+	
+
+func set_ready():
+	moving = true
+	$Car.enable_control = true
+	$Car.enable_camera()
+"
+
+[sub_resource type="GDScript" id="GDScript_pess2"]
+script/source = "#grouping move along object and reparent to root scene when started
+extends Node2D
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_6phvn"]
+script/source = "extends Area2D
+"
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6phvn"]
+a = Vector2(32, 0)
+b = Vector2(288, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
+radius = 46.0341
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pess2"]
+radius = 62.6064
+
+[sub_resource type="Animation" id="Animation_pess2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Car:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(160, 234)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Car:enable_control")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:moving")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_6phvn"]
+resource_name = "start"
+length = 2.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Car:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.9),
+"transitions": PackedFloat32Array(-1.8025, 1),
+"update": 0,
+"values": [Vector2(160, 355), Vector2(160, 234)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Car:enable_control")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:moving")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pess2"]
+_data = {
+&"RESET": SubResource("Animation_pess2"),
+&"start": SubResource("Animation_6phvn")
+}
+
+[node name="testLevel" type="Node2D"]
+y_sort_enabled = true
+script = SubResource("GDScript_7k86c")
+
+[node name="main_ui" parent="." instance=ExtResource("1_ywvy0")]
+
+[node name="bg" type="Parallax2D" parent="."]
+z_index = -99
+repeat_size = Vector2(0, 320)
+autoscroll = Vector2(0, 100)
+follow_viewport = false
+ignore_camera_scroll = true
+
+[node name="Icon" type="Sprite2D" parent="bg"]
+texture = ExtResource("2_qean1")
+centered = false
+
+[node name="Car" parent="." instance=ExtResource("3_mm7o3")]
+position = Vector2(160, 234)
+init_enable_cam = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(160, 160)
+drag_left_margin = 1.0
+drag_right_margin = 1.0
+editor_draw_limits = true
+script = ExtResource("4_3m6gi")
+
+[node name="move_along" type="Node2D" parent="."]
+script = SubResource("GDScript_pess2")
+
+[node name="boost" type="Area2D" parent="move_along"]
+position = Vector2(0, -713)
+collision_layer = 16
+collision_mask = 0
+script = SubResource("GDScript_6phvn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/boost"]
+shape = SubResource("SegmentShape2D_6phvn")
+
+[node name="Line2D" type="Line2D" parent="move_along/boost"]
+points = PackedVector2Array(32, 0, 288, 0)
+width = 4.0
+default_color = Color(1, 0, 0, 0.329412)
+
+[node name="soft" type="Area2D" parent="move_along"]
+position = Vector2(159, -156)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="hard" type="Area2D" parent="move_along"]
+position = Vector2(93, -541)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_pess2")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pess2")
+}

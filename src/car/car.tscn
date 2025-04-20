@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cvdjeuqi55t5a"]
+[gd_scene load_steps=20 format=3 uid="uid://cvdjeuqi55t5a"]
 
 [ext_resource type="Texture2D" uid="uid://wf26b7xbyu5f" path="res://asset/car/car_slice.png" id="1_iox4k"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="3_ikygv"]
@@ -13,7 +13,7 @@ var car_slice_text = preload(\"res://asset/car/car_slice.png\")
 var x_input = 0.0
 
 var speed = 0.0
-var apply_speed = 0.0
+@export var apply_speed = 0.0
 var acc = 9.5
 var move_toward_speed = 30.0
 const MAX_SPEED = 350.0
@@ -41,6 +41,10 @@ var car_pos_vel = Vector2.ZERO
 
 var hp = 3
 
+@export var debug_invin = false
+@export var enable_control = true
+@export var init_enable_cam = true
+
 var invin = false
 
 @export var left_wall = 32.0
@@ -59,8 +63,15 @@ func _ready() -> void:
 		new_slice.flip_v = true
 		new_slice.frame = i
 	
+	if init_enable_cam:
+		enable_camera()
+	
 	$soft_hit.connect(\"area_entered\", func(area): hurt(1))
 	$hard_hit.connect(\"area_entered\", func(area): hurt(3))
+	$boost_detect.connect(\"area_entered\", func(area):
+		accelerate()
+		area.remove()
+		)
 
 func _physics_process(delta: float) -> void:
 	
@@ -75,21 +86,21 @@ func _physics_process(delta: float) -> void:
 	$modulate_control/car_render.scale = lerp($modulate_control/car_render.scale, Vector2(1,1), 0.1)
 	$modulate_control/car_render.material.set_shader_parameter(\"progress\", clamp(dash_cd/DEF_DASH_CD, 0.0, 1.0))
 	
-	#acceleration
-	if Input.is_action_just_pressed(\"ui_up\") and main_speed_acc_cd < 0.0:
-		main_speed += 20
-		DEF_DASH_CD *= 0.95
-		acc += 0.5
-		acc = clamp(acc, 0.0, 18.0)
-		$modulate_control/car_render.scale = Vector2(0.8, 1.2)
-		$camera_control.zoomin(clamp(1 + 0.01 * ((main_speed-20) / 20), 0.0, 1.3))
-		
-		main_speed_acc_cd = DEF_MAIN_SPEED_CD
-	
-	main_speed_acc_cd -= delta
+	#acceleration (move into a trigger only function)
+	#if Input.is_action_just_pressed(\"ui_up\"):
+		#main_speed += 20
+		#DEF_DASH_CD *= 0.95
+		#acc += 0.5
+		#acc = clamp(acc, 0.0, 18.0)
+		#$modulate_control/car_render.scale = Vector2(0.8, 1.2)
+		#$camera_control.zoomin(clamp(1 + 0.01 * ((main_speed-20) / 20), 0.0, 1.3))
+		#
+		#main_speed_acc_cd = DEF_MAIN_SPEED_CD
+	#
+	#main_speed_acc_cd -= delta
 	
 	#dash
-	if Input.is_action_just_pressed(\"ui_right\"):
+	if Input.is_action_just_pressed(\"ui_right\") and enable_control:
 		if press_dir == \"right\" and press_delta > 0.0 and dash_cd < 0.0:
 			press_delta = 0.0
 			dash_cd = DEF_DASH_CD
@@ -97,7 +108,7 @@ func _physics_process(delta: float) -> void:
 		
 		press_dir = \"right\"
 		press_delta = MAX_PRESS_DELTA
-	elif Input.is_action_just_pressed(\"ui_left\"):
+	elif Input.is_action_just_pressed(\"ui_left\") and enable_control:
 		if press_dir == \"left\" and press_delta > 0.0 and dash_cd < 0.0:
 			press_delta = 0.0
 			dash_cd = DEF_DASH_CD
@@ -111,17 +122,18 @@ func _physics_process(delta: float) -> void:
 	
 	#moving input
 	var new_acc = acc
-	#if invin:
-		#new_acc = max(acc, 15)
 	
-	x_input = Input.get_axis(\"ui_left\", \"ui_right\")
-	speed += x_input * new_acc
+	if enable_control:
+		x_input = Input.get_axis(\"ui_left\", \"ui_right\")
+		speed += x_input * new_acc
 	
 	speed = clamp(speed, -MAX_SPEED, MAX_SPEED)
 	if dash_duration > 0.0:
 		apply_speed = lerp(apply_speed, speed, 0.1)
 	else:
-		apply_speed = speed
+		if enable_control:
+			apply_speed = speed
+	
 	position.x += apply_speed * delta
 	
 	if x_input == 0:
@@ -129,19 +141,19 @@ func _physics_process(delta: float) -> void:
 	
 	dash_duration -= delta
 	debug_x_pos = position.x
-
 	
 	#wall detect
-	if position.x <= left_wall and apply_speed < 0.0 and invin == false:
-		hurt(1)
-		speed = MAX_SPEED / 3
-	elif position.x >= right_wall and apply_speed >= 0.0 and invin == false:
-		hurt(1)
-		speed = -MAX_SPEED / 3
+	if debug_invin == false:
+		if position.x <= left_wall and apply_speed < 0.0 and invin == false:
+			hurt(1)
+			speed = MAX_SPEED / 3
+		elif position.x >= right_wall and apply_speed >= 0.0 and invin == false:
+			hurt(1)
+			speed = -MAX_SPEED / 3
 	
 	position.x = clamp(position.x, left_wall, right_wall)
 	
-	print(new_acc)
+	#print(apply_speed)
 	
 	#rotate car
 	for s in $SubViewport/car_slice.get_children():
@@ -163,17 +175,27 @@ func dash():
 			dash_duration = DEF_DASH_DURATION
 	press_dir = \"none\"
 
-
+func accelerate():
+	main_speed += 15
+	DEF_DASH_CD *= 0.95
+	acc += 0.5
+	acc = clamp(acc, 0.0, 18.0)
+	$modulate_control/car_render.scale = Vector2(0.8, 1.2)
+	$camera_control.zoomin(clamp(1 + 0.01 * ((main_speed-20) / 20), 0.0, 1.3))
 
 func hurt(damage):
+	if debug_invin:
+		return
+	
 	print(\"hurt\")
 	
-	if invin == false:
+	if invin == false or damage >= 3:
 		$camera_control.shake()
 		hp -= damage
 		
 		if hp <= 0:
 			dead()
+			get_tree().current_scene.get_node(\"Camera2D\").enabled = true
 			get_tree().current_scene.get_node(\"Camera2D\").shake()
 			print(\"ded\")
 			return
@@ -191,6 +213,14 @@ func dead():
 	part_ins.global_position = global_position
 	
 	queue_free()
+
+func enable_camera():
+	$camera_control/Camera2D.enabled = true
+	get_tree().current_scene.get_node(\"Camera2D\").enabled = false
+
+func disable_camera():
+	$camera_control/Camera2D.enabled = false
+	get_tree().current_scene.get_node(\"Camera2D\").enabled = true
 "
 
 [sub_resource type="GDScript" id="GDScript_xlk8c"]
@@ -201,7 +231,10 @@ func _ready() -> void:
 	queue_free()
 "
 
-[sub_resource type="Shader" id="Shader_ikygv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_01h6g"]
+resource_local_to_scene = true
+
+[sub_resource type="Shader" id="Shader_tf5ac"]
 code = "shader_type canvas_item;
 
 uniform float width;
@@ -219,7 +252,7 @@ void vertex() {
 void fragment() {
 	float pixelSizeX = 1.0 / width;
 	float pixelSizeY = 1.0 / height;
-
+	
 	if (COLOR.a > 0.0 && UV.y >= 1.0 - progress){
 		COLOR = mix(COLOR, vec4(1,1,1,0.3), 0.2 + (0.5 * progress));
 	}
@@ -242,7 +275,7 @@ void fragment() {
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ikygv"]
-shader = SubResource("Shader_ikygv")
+shader = SubResource("Shader_tf5ac")
 shader_parameter/width = 48.0
 shader_parameter/height = 48.0
 shader_parameter/progress = 1.0
@@ -328,6 +361,12 @@ func zoomin(target):
 	$Camera2D.zoomin(target)
 "
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tf5ac"]
+size = Vector2(20, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k527v"]
+size = Vector2(16, 30)
+
 [node name="Car" type="Node2D"]
 script = SubResource("GDScript_tmscv")
 
@@ -348,6 +387,7 @@ offset = Vector2(0, -4)
 [node name="car_slice" type="Node2D" parent="SubViewport"]
 
 [node name="modulate_control" type="Node2D" parent="."]
+material = SubResource("ShaderMaterial_01h6g")
 
 [node name="car_render" type="Sprite2D" parent="modulate_control"]
 material = SubResource("ShaderMaterial_ikygv")
@@ -384,13 +424,30 @@ shape = SubResource("CapsuleShape2D_k527v")
 debug_color = Color(0.921815, 0.169969, 0.553005, 0.42)
 
 [node name="camera_control" type="Marker2D" parent="."]
-position = Vector2(0, -111)
+position = Vector2(0, -74)
 script = SubResource("GDScript_tf5ac")
 
 [node name="Camera2D" type="Camera2D" parent="camera_control"]
+enabled = false
 drag_horizontal_enabled = true
 drag_left_margin = 1.0
 drag_right_margin = 1.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource("4_tf5ac")
+
+[node name="boost_detect" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="boost_detect"]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_tf5ac")
+debug_color = Color(0.690015, 0.558757, 0, 0.42)
+
+[node name="player_hit_box" type="Area2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player_hit_box"]
+shape = SubResource("RectangleShape2D_k527v")
+debug_color = Color(0.96, 0, 0.528, 0.2)

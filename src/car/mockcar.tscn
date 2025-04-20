@@ -1,0 +1,174 @@
+[gd_scene load_steps=11 format=3 uid="uid://duqtt81h77dl0"]
+
+[ext_resource type="Texture2D" uid="uid://wf26b7xbyu5f" path="res://asset/car/car_slice.png" id="1_qvp31"]
+[ext_resource type="Shader" uid="uid://dch6ui5g2x52e" path="res://src/shader/outline.gdshader" id="2_j2trx"]
+[ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="3_4mmhm"]
+[ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="4_ia8cg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ucc0p"]
+shader = ExtResource("2_j2trx")
+shader_parameter/width = 48.0
+shader_parameter/height = 48.0
+shader_parameter/outlineColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qvp31"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="Animation" id="Animation_tf5ac"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("modulate_control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ikygv"]
+resource_name = "blink"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("modulate_control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tf5ac"]
+_data = {
+&"RESET": SubResource("Animation_tf5ac"),
+&"blink": SubResource("Animation_ikygv")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lsjg7"]
+shader = ExtResource("3_4mmhm")
+
+[node name="Mockcar" type="Node2D"]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(48, 48)
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+offset = Vector2(0, -4)
+
+[node name="CarSlice" type="Sprite2D" parent="SubViewport"]
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+
+[node name="CarSlice2" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -1)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 1
+
+[node name="CarSlice3" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -2)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 2
+
+[node name="CarSlice4" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -3)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 3
+
+[node name="CarSlice5" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -4)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 4
+
+[node name="CarSlice6" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -5)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 5
+
+[node name="CarSlice7" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -6)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 6
+
+[node name="CarSlice8" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -7)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 7
+
+[node name="CarSlice9" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -8)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 8
+
+[node name="CarSlice10" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -9)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 9
+
+[node name="CarSlice11" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -10)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 10
+
+[node name="CarSlice12" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -11)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 11
+
+[node name="CarSlice13" type="Sprite2D" parent="SubViewport"]
+position = Vector2(0, -12)
+rotation = 3.14159
+texture = ExtResource("1_qvp31")
+hframes = 13
+frame = 12
+
+[node name="car_render" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_ucc0p")
+scale = Vector2(1.00275, 1)
+texture = SubResource("ViewportTexture_qvp31")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="car_render"]
+root_node = NodePath("../../..")
+libraries = {
+&"": SubResource("AnimationLibrary_tf5ac")
+}
+
+[node name="car_shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.219608)
+z_index = -1
+material = SubResource("ShaderMaterial_lsjg7")
+position = Vector2(0, 2)
+scale = Vector2(0.171875, 0.257813)
+texture = ExtResource("4_ia8cg")

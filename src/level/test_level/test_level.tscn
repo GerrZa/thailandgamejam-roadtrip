@@ -50,6 +50,6 @@ y_sort_enabled = true
 script = SubResource("GDScript_tlnv8")
 
 [node name="Car" parent="." instance=ExtResource("1_1yp2v")]
-position = Vector2(240, 268)
+position = Vector2(160, 234)
 
 [node name="obs" type="Node2D" parent="."]

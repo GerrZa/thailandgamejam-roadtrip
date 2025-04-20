@@ -1,16 +1,14 @@
-[gd_scene load_steps=26 format=3 uid="uid://cmhqt0spblavr"]
+[gd_scene load_steps=23 format=3 uid="uid://cmhqt0spblavr"]
 
 [ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="1_sit3r"]
-[ext_resource type="Texture2D" uid="uid://ca8aq5ai5ss8q" path="res://asset/level/level1/level1_bg_remake.png" id="2_6phvn"]
+[ext_resource type="Texture2D" uid="uid://e86uq5u4guue" path="res://asset/level/level1/level1_bg_remake.png" id="2_6phvn"]
 [ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="4_kp6mm"]
 [ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="5_6phvn"]
-[ext_resource type="PackedScene" uid="uid://c3r0y08y1jx01" path="res://src/etc/boost.tscn" id="5_8wi4v"]
 [ext_resource type="Shader" uid="uid://dnj0ccl48ntu4" path="res://src/shader/pulse_color.gdshader" id="5_j8foc"]
 [ext_resource type="Texture2D" uid="uid://b0mkvp12h024h" path="res://asset/level/level1/rock_obs.png" id="5_pess2"]
 [ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="6_84p2n"]
 [ext_resource type="Texture2D" uid="uid://do7w1rhh1luad" path="res://asset/level/level1/blocker_obs.png" id="6_pess2"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="7_p7x62"]
-[ext_resource type="AudioStream" uid="uid://e4c0pi4n5heg" path="res://asset/sound/ambient/car_ambient.mp3" id="11_vmsyg"]
 
 [sub_resource type="GDScript" id="GDScript_j8foc"]
 script/source = "extends Node2D
@@ -29,52 +27,52 @@ func _ready() -> void:
 		i.reparent(self)
 	
 	#SKIPPP
-	#var test_seq = [
-		#{
-			#\"type\":\"animation\",
-			#\"animplayer\":$AnimationPlayer,
-			#\"animname\":\"start\"
-		#},
-		#{
-			#\"type\":\"dialog\",
-			#\"char\":\"Boris\",
-			#\"text\":\"YOOOO dialog system!!!\",
-			#\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			#\"glob\":Vector2(80,80),
-			#\"target\":$main_ui
-		#},
-		#{
-			#\"type\":\"dialog\",
-			#\"char\":\"Dude\",
-			#\"text\":\"STFU\",
-			#\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			#\"glob\":Vector2(180,120),
-			#\"target\":$main_ui
-		#},
-		#{
-			#\"type\":\"dialogfunc\",
-			#\"func\":\"delete_char\",
-			#\"arg\":[\"Dude\"]
-		#},
-		#{
-			#\"type\":\"dialog\",
-			#\"char\":\"Boris\",
-			#\"text\":\"Fuck you\",
-			#\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			#\"glob\":Vector2(80,80),
-			#\"target\":$main_ui
-		#},
-		#{
-			#\"type\":\"dialogfunc\",
-			#\"func\":\"clear_dialog\"
-		#},
-		#{
-			#\"type\":\"manipulate\",
-			#\"node\":self,
-			#\"func\":\"end_cutscene\",
-			#\"arg\":[]
-		#}
-	#]
+	var test_seq = [
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"start\"
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Boris\",
+			\"text\":\"YOOOO dialog system!!!\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(80,80),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Dude\",
+			\"text\":\"STFU\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(180,120),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"delete_char\",
+			\"arg\":[\"Dude\"]
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"Boris\",
+			\"text\":\"Fuck you\",
+			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"glob\":Vector2(80,80),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":self,
+			\"func\":\"end_cutscene\",
+			\"arg\":[]
+		}
+	]
 	#STOP SKIP
 	
 	var level1_seq1 = [
@@ -94,7 +92,7 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I can remember how to start a car and nothing else.\",
+			\"text\":\"Trust issue?\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
@@ -102,39 +100,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"[wave amp=20.0 freq=5.0 connected=1][color=Dimgray](am I gonna die today?)[/color][/wave]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"Ok, so, you use your [color=blue]arrow keys[/color] to turn the car left and right.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"Car's not gonna turn itself back, so don't forget to turn it back ok?\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"And don't drive out of the road way.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"You're still new so just keep it slow and you'll be fine.\",
+			\"text\":\"Nooo! Whatever just.. don't drive too fast ok?\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
@@ -145,14 +111,6 @@ func _ready() -> void:
 			\"text\":\"Got it.\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(160,140),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"Good.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
 		{
@@ -218,62 +176,6 @@ func _process(delta: float) -> void:
 [sub_resource type="GDScript" id="GDScript_p7x62"]
 script/source = "extends Area2D
 
-var cutscene2
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	cutscene2 = [
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene,
-			\"func\":\"start_cutscene\",
-			\"arg\":[]
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"Hey! Why are you speeding!?\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{ 
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"I'm not????\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{
-			\"type\":\"dialogfunc\",
-			\"func\":\"clear_dialog\"
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene,
-			\"func\":\"end_cutscene\",
-			\"arg\":[]
-		}
-	]
-	
-	
-	connect(\"area_entered\", func(area) : run_cutscene())
-
-func run_cutscene():
-	
-	print(\"run cutscene\")
-	
-	SimpleDialog.set_sequence(cutscene2)
-	SimpleDialog.execute_sequence()
-"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7x62"]
-size = Vector2(321, 52)
-
-[sub_resource type="GDScript" id="GDScript_8wi4v"]
-script/source = "extends Area2D
-
 var cutscene3
 
 # Called when the node enters the scene tree for the first time.
@@ -288,7 +190,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"[shake rate=20.0 level=5 connected=1]HEY! SLOW DOWN!!![/shake]\",
+			\"text\":\"[shake rate=20.0 level=5 connected=1]SLOW DOWN!!![/shake]\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -320,70 +222,20 @@ func run_cutscene():
 	
 	print(\"run cutscene\")
 	
-	SimpleDialog.set_sequence(cutscene3)
+	SimpleDialog.set_sequence(cut_scene3)
 	SimpleDialog.execute_sequence()
 "
 
-[sub_resource type="GDScript" id="GDScript_vmsyg"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7x62"]
+size = Vector2(321, 52)
+
+[sub_resource type="GDScript" id="GDScript_6phvn"]
 script/source = "extends Area2D
-
-var cutscene4
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	cutscene4 = [
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene,
-			\"func\":\"start_cutscene\",
-			\"arg\":[]
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"[shake rate=30.0 level=7 connected=1]I SAID SLOWDOWN!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{ 
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"[shake rate=30.0 level=7 connected=1]I CAN'T!!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"[color=red][shake rate=30.0 level=7 connected=1]HEY! WATCH OUT! DEAD AHEAD!!![/shake][/color]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{
-			\"type\":\"dialogfunc\",
-			\"func\":\"clear_dialog\"
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene,
-			\"func\":\"end_cutscene\",
-			\"arg\":[]
-		}
-	]
-	
-	
-	connect(\"area_entered\", func(area) : run_cutscene())
-
-func run_cutscene():
-	
-	print(\"run cutscene\")
-	
-	SimpleDialog.set_sequence(cutscene4)
-	SimpleDialog.execute_sequence()
 "
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6phvn"]
+a = Vector2(32, 0)
+b = Vector2(288, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
 radius = 46.0341
@@ -486,21 +338,6 @@ _data = {
 &"start": SubResource("Animation_6phvn")
 }
 
-[sub_resource type="GDScript" id="GDScript_afxm8"]
-script/source = "extends AudioStreamPlayer
-
-var target_db = -15.0
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	volume_db = -30
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.01)
-"
-
 [node name="Level1" type="Node2D"]
 y_sort_enabled = true
 script = SubResource("GDScript_j8foc")
@@ -545,19 +382,25 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
-[node name="boost" parent="move_along" instance=ExtResource("5_8wi4v")]
+[node name="boost" type="Area2D" parent="move_along"]
+z_index = -5
 position = Vector2(0, -43)
+collision_layer = 16
+collision_mask = 0
+script = SubResource("GDScript_6phvn")
+metadata/_edit_group_ = true
 
-[node name="boost2" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -609)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/boost"]
+shape = SubResource("SegmentShape2D_6phvn")
 
-[node name="boost3" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -1209)
+[node name="Line2D" type="Line2D" parent="move_along/boost"]
+points = PackedVector2Array(40, 0, 277, 0)
+default_color = Color(1, 0, 0, 0.329412)
 
 [node name="cutscene_3" type="Area2D" parent="move_along"]
 position = Vector2(0, -678)
 collision_layer = 0
-script = SubResource("GDScript_8wi4v")
+script = SubResource("GDScript_p7x62")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_3"]
@@ -565,10 +408,25 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
+[node name="boost2" type="Area2D" parent="move_along"]
+z_index = -5
+position = Vector2(0, -608)
+collision_layer = 16
+collision_mask = 0
+script = SubResource("GDScript_6phvn")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/boost2"]
+shape = SubResource("SegmentShape2D_6phvn")
+
+[node name="Line2D" type="Line2D" parent="move_along/boost2"]
+points = PackedVector2Array(40, 0, 277, 0)
+default_color = Color(1, 0, 0, 0.329412)
+
 [node name="cutscene_4" type="Area2D" parent="move_along"]
 position = Vector2(0, -1272)
 collision_layer = 0
-script = SubResource("GDScript_vmsyg")
+script = SubResource("GDScript_p7x62")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_4"]
@@ -576,19 +434,23 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
-[node name="cutscene_5" type="Area2D" parent="move_along"]
-position = Vector2(0, -3421)
-collision_layer = 0
-script = SubResource("GDScript_vmsyg")
+[node name="boost3" type="Area2D" parent="move_along"]
+z_index = -5
+position = Vector2(0, -1202)
+collision_layer = 16
+collision_mask = 0
+script = SubResource("GDScript_6phvn")
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_5"]
-position = Vector2(160.5, 0)
-shape = SubResource("RectangleShape2D_p7x62")
-debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/boost3"]
+shape = SubResource("SegmentShape2D_6phvn")
+
+[node name="Line2D" type="Line2D" parent="move_along/boost3"]
+points = PackedVector2Array(40, 0, 277, 0)
+default_color = Color(1, 0, 0, 0.329412)
 
 [node name="soft" type="Area2D" parent="move_along"]
-position = Vector2(239, -1809)
+position = Vector2(255, -1502)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -610,7 +472,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft2" type="Area2D" parent="move_along"]
-position = Vector2(80, -2312)
+position = Vector2(80, -1651)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -632,7 +494,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="hard" type="Area2D" parent="move_along"]
-position = Vector2(157, -2844)
+position = Vector2(157, -1986)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -659,9 +521,3 @@ texture = ExtResource("7_p7x62")
 libraries = {
 &"": SubResource("AnimationLibrary_pess2")
 }
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("11_vmsyg")
-volume_db = -10.0
-autoplay = true
-script = SubResource("GDScript_afxm8")

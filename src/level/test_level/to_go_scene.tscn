@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://xmt4u6gxln4c"]
+
+[sub_resource type="GDScript" id="GDScript_eo6o2"]
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed(\"ui_accept\"):
+		get_tree().change_scene_to_file(\"res://src/level/level1/level1.tscn\")
+"
+
+[node name="ToGoScene" type="Node2D"]
+script = SubResource("GDScript_eo6o2")

@@ -9,13 +9,8 @@ var shaking = true
 
 var to_zoom 
 
-
-
 func _physics_process(delta: float) -> void:
 	position += (offset - to_pos) * 0.1
-	
-	if Input.is_action_just_pressed("ui_accept"):
-		shake() 
 	
 	if shaking:
 		randomize()

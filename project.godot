@@ -20,6 +20,11 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
 
+[autoload]
+
+SimpleDialog="*res://src/ui/simple_dialog/simple_dialog.gd"
+Global="*res://src/etc/global.gd"
+
 [display]
 
 window/size/viewport_width=320
@@ -34,6 +39,8 @@ window/stretch/mode="viewport"
 2d_physics/layer_2="wall"
 2d_physics/layer_3="softobs"
 2d_physics/layer_4="hardobs"
+2d_physics/layer_5="boost"
+2d_physics/layer_6="comsumable"
 
 [rendering]
 

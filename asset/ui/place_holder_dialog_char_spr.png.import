@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgf5nfgbhq1pp"
-path="res://.godot/imported/ptt_sign.png-377586cb972784d537e42fd5857dd0bd.ctex"
+uid="uid://bybccr7sgo4ey"
+path="res://.godot/imported/place_holder_dialog_char_spr.png-2cccb7051dcb09482e54667f41634db6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/obs/ptt_sign.png"
-dest_files=["res://.godot/imported/ptt_sign.png-377586cb972784d537e42fd5857dd0bd.ctex"]
+source_file="res://asset/ui/place_holder_dialog_char_spr.png"
+dest_files=["res://.godot/imported/place_holder_dialog_char_spr.png-2cccb7051dcb09482e54667f41634db6.ctex"]
 
 [params]
 

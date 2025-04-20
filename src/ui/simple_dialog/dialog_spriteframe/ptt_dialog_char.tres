@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://d2i3x1rk8ogy"]
+
+[ext_resource type="Texture2D" uid="uid://bybccr7sgo4ey" path="res://asset/ui/place_holder_dialog_char_spr.png" id="1_jbywp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj2nl"]
+atlas = ExtResource("1_jbywp")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg6oo"]
+atlas = ExtResource("1_jbywp")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_re5ak"]
+atlas = ExtResource("1_jbywp")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ugoy7"]
+atlas = ExtResource("1_jbywp")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_blyvi"]
+atlas = ExtResource("1_jbywp")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj2nl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wg6oo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_re5ak")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ugoy7")
+}],
+"loop": true,
+"name": &"say",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_blyvi")
+}],
+"loop": true,
+"name": &"shut",
+"speed": 5.0
+}]
