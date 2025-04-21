@@ -1,10 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3r0y08y1jx01"]
-
-[ext_resource type="Shader" uid="uid://h6uf0rm7te8b" path="res://src/shader/dye_color.gdshader" id="1_olll4"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lxtw1"]
-shader = ExtResource("1_olll4")
-shader_parameter/dye_color = Color(1, 1, 1, 1)
+[gd_scene load_steps=3 format=3 uid="uid://c3r0y08y1jx01"]
 
 [sub_resource type="GDScript" id="GDScript_6phvn"]
 script/source = "extends Area2D
@@ -29,7 +23,6 @@ b = Vector2(288, 0)
 
 [node name="boost" type="Area2D"]
 z_index = -5
-material = SubResource("ShaderMaterial_lxtw1")
 collision_layer = 16
 collision_mask = 0
 script = SubResource("GDScript_6phvn")
@@ -44,6 +37,5 @@ default_color = Color(1, 0, 0, 0.329412)
 
 [node name="Line2Dblink" type="Line2D" parent="."]
 visible = false
-use_parent_material = true
 points = PackedVector2Array(40, 0, 277, 0)
-default_color = Color(1, 0, 0, 0.329412)
+width = 12.0

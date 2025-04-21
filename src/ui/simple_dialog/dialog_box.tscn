@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="2_jmgcx"]
 [ext_resource type="SpriteFrames" uid="uid://d2i3x1rk8ogy" path="res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres" id="3_gj2nl"]
 [ext_resource type="Texture2D" uid="uid://cly6n8nn0qa66" path="res://asset/ui/dialog_arrow_spr.png" id="4_wg6oo"]
-[ext_resource type="AudioStream" uid="uid://b3e2dln6qkc8f" path="res://asset/sound/sfx/dialog_sound.mp3" id="5_re5ak"]
+[ext_resource type="AudioStream" uid="uid://ca3hj5i4wiae0" path="res://asset/sound/sfx/dialog_sound2.mp3" id="5_re5ak"]
 
 [sub_resource type="GDScript" id="GDScript_gj2nl"]
 script/source = "extends Node2D
@@ -66,13 +66,15 @@ func _physics_process(delta: float) -> void:
 	
 	if box_anim_finish and text_anim_finish == false:
 		float_vis_char += 0.6
-		$dialog_box/RichTextLabel.visible_characters = ceil(float_vis_char)
+		
+		if floor(float_vis_char) > $dialog_box/RichTextLabel.visible_characters:# and $sfx.playing == false:
+			$sfx.play()
+		
+		$dialog_box/RichTextLabel.visible_characters = floor(float_vis_char)
 		$char.play(\"say\")
-		$sfx.playing = true
 	
 	if $dialog_box/RichTextLabel.visible_ratio >= 1.0 and text_anim_finish == false:
 		focus = true
-		$sfx.playing = false
 	
 	if $dialog_box/RichTextLabel.visible_ratio >= 1.0:
 		text_anim_finish = true
@@ -111,8 +113,6 @@ func new_dialog(text := \"no text\", spr_frame = $char.sprite_frames):
 	text_anim_finish = false
 	focus = true
 	
-	$sfx.playing = true
-		
 	least_time = DEF_LEAST_T
 
 func init(new_charname, new_text, char_spr : SpriteFrames):
@@ -257,5 +257,5 @@ label_settings = SubResource("LabelSettings_wg6oo")
 [node name="sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_re5ak")
 volume_db = -7.0
-pitch_scale = 0.9
+bus = &"dialog"
 playback_type = 1

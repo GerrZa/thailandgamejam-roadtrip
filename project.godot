@@ -33,6 +33,11 @@ window/size/window_width_override=640
 window/size/window_height_override=640
 window/stretch/mode="viewport"
 
+[editor]
+
+movie_writer/movie_file="D:/vdo/thaijam_sneekpeak.avi"
+movie_writer/fps=100
+
 [layer_names]
 
 2d_physics/layer_1="player"

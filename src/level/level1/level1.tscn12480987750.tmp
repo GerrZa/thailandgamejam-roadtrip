@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cmhqt0spblavr"]
+[gd_scene load_steps=35 format=3 uid="uid://cmhqt0spblavr"]
 
 [ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="1_sit3r"]
 [ext_resource type="Texture2D" uid="uid://ca8aq5ai5ss8q" path="res://asset/level/level1/level1_bg_remake.png" id="2_6phvn"]
@@ -14,11 +14,7 @@
 [ext_resource type="Script" uid="uid://phvnha2mw3yo" path="res://src/level/level1/car_driving_ambient.gd" id="12_afxm8"]
 [ext_resource type="Texture2D" uid="uid://cglhuafuy61e8" path="res://asset/car/car_slice-sheet.png" id="12_gw2na"]
 [ext_resource type="AudioStream" uid="uid://c6n7i3m1775po" path="res://asset/sound/ambient/car_driving_sfx.mp3" id="12_mep31"]
-[ext_resource type="Texture2D" uid="uid://fm6iule1fdee" path="res://asset/ui/left_button_sheet.png" id="12_vtvjq"]
-[ext_resource type="Texture2D" uid="uid://7s407rdi5wxa" path="res://asset/ui/right_button_sheet.png" id="13_26xyn"]
-[ext_resource type="AudioStream" uid="uid://c4d8hlbcepr8y" path="res://asset/sound/music/hawaii_radio.mp3" id="14_11t3l"]
-[ext_resource type="AudioStream" uid="uid://d4ityubxilpbk" path="res://asset/sound/music/edited_bass.mp3" id="16_1ejwl"]
-[ext_resource type="AudioStream" uid="uid://dqjknde55ufic" path="res://asset/sound/music/edited_drum1.mp3" id="17_dqjo4"]
+[ext_resource type="AudioStream" uid="uid://c4d8hlbcepr8y" path="res://asset/sound/ambient/hawaii_radio.mp3" id="14_11t3l"]
 
 [sub_resource type="GDScript" id="GDScript_j8foc"]
 script/source = "extends Node2D
@@ -94,54 +90,6 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"[wave amp=40.0 freq=5.0 connected=0]Wheww~~~~~[/wave]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"It been a while since I went on a roadtrip.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"Yeah.. me too.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"And lucky I bought this beautiful car with a...\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"[rainbow freq=1.0 sat=1.0 val=0.9 speed=1.0]UNBELIEVEABLE\\nCHEAP PRICE![/rainbow]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"HAHA!\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
-			\"target\":$main_ui
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
 			\"text\":\"Are you sure you know how to drive?\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(60,120),
@@ -150,7 +98,7 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I can remember how to start the engine and nothing else.\",
+			\"text\":\"I can remember how to start a car and nothing else.\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
@@ -190,7 +138,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"I think if you keep it slow you should fine.\",
+			\"text\":\"You're still new so just keep it slow and you'll be fine.\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
@@ -198,7 +146,7 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"Pfft! Easy peasy...\",
+			\"text\":\"Got it.\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
@@ -287,12 +235,6 @@ func _ready() -> void:
 			\"func\":\"start_cutscene\",
 			\"arg\":[]
 		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"radio_ambient\"),
-			\"func\":\"set_target\",
-			\"arg\":[-20.0]
-		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
@@ -349,24 +291,6 @@ func _ready() -> void:
 			\"func\":\"start_cutscene\",
 			\"arg\":[]
 		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"radio_ambient\"),
-			\"func\":\"set_target\",
-			\"arg\":[-50.0]
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player\"),
-			\"func\":\"play_all\",
-			\"arg\":[]
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player\"),
-			\"func\":\"set_instrument\",
-			\"arg\":[\"bass\", -13.0]
-		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
@@ -381,14 +305,6 @@ func _ready() -> void:
 			\"text\":\"[shake rate=20.0 level=5 connected=1]I'M TRYING!!![/shake]\",
 			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
 			\"glob\":Vector2(160,140),
-			\"target\":get_tree().current_scene.get_node(\"main_ui\")
-		},
-		{ #########################
-			\"type\":\"dialog\",
-			\"char\":\"Grace\",
-			\"text\":\"[color=red][shake rate=20.0 level=5 connected=1]WATCH OUT!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{
@@ -427,18 +343,6 @@ func _ready() -> void:
 			\"node\":get_tree().current_scene,
 			\"func\":\"start_cutscene\",
 			\"arg\":[]
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player\"),
-			\"func\":\"set_instrument\",
-			\"arg\":[\"bass\", -7.0]
-		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player\"),
-			\"func\":\"set_instrument\",
-			\"arg\":[\"drum1\", -13.0]
 		},
 		{ #########################
 			\"type\":\"dialog\",
@@ -515,10 +419,7 @@ var target_fade_trans = 0.0
 
 var active = false
 
-var target_modulate = 0.0
-
 func _ready() -> void:
-	$button.modulate.a = 0.0
 	connect(\"area_entered\", func(area):
 		player_arrive()
 		active = true)
@@ -531,9 +432,6 @@ func _physics_process(delta: float) -> void:
 	
 	$fade.material.set_shader_parameter(\"fade_val\", lerp($fade.material.get_shader_parameter(\"fade_val\"), target_fade_trans, 0.1))
 	
-	$button.modulate.a = lerp($button.modulate.a, target_modulate, 0.05)
-	$button2.modulate = $button.modulate
-	
 	#dash
 	if active:
 		if Input.is_action_just_pressed(\"ui_right\"):
@@ -542,7 +440,6 @@ func _physics_process(delta: float) -> void:
 				get_tree().current_scene.get_node(\"Car\").force_dash(1)
 				speed_back()
 				active = false
-				player_go()
 			
 			press_dir = \"right\"
 			press_delta = MAX_PRESS_DELTA
@@ -552,8 +449,7 @@ func _physics_process(delta: float) -> void:
 				get_tree().current_scene.get_node(\"Car\").force_dash(-1)
 				speed_back()
 				active = false
-				player_go()
-			
+				
 			press_dir = \"left\"
 			press_delta = MAX_PRESS_DELTA
 		
@@ -567,28 +463,9 @@ func speed_back():
 	t_scale_target = 1.0
 	target_fade_trans = 0.0
 
-func player_go():
-	var music = get_tree().current_scene.get_node(\"music_player\")
-	
-	target_modulate = 0.0
-	
-	music.set_instrument(\"bass1\", -7.0)
-	music.set_instrument(\"bass\", -7.0)
-	get_tree().current_scene.get_node(\"car_driving_ambient\").set_target(-15.0)
-	get_tree().current_scene.get_node(\"ambient_player\").set_target(-13.0)
-
 func player_arrive():
 	print(\"reach\")
 	slow_down()
-	
-	target_modulate = 1.0
-	
-	var music = get_tree().current_scene.get_node(\"music_player\")
-	
-	music.set_instrument(\"bass1\", -20.0)
-	music.set_instrument(\"bass\", -20.0)
-	get_tree().current_scene.get_node(\"car_driving_ambient\").set_target(-50.0)
-	get_tree().current_scene.get_node(\"ambient_player\").set_target(-50.0)
 "
 
 [sub_resource type="Shader" id="Shader_11t3l"]
@@ -626,70 +503,6 @@ shader_parameter/fade_val = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_11t3l"]
 size = Vector2(332, 20)
-
-[sub_resource type="Animation" id="Animation_vtvjq"]
-resource_name = "def"
-length = 1.4
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 0, 1, 0]
-}
-
-[sub_resource type="Animation" id="Animation_dqjo4"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_26xyn"]
-resource_name = "def_2"
-length = 1.4
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.7, 0.8, 0.9, 1, 1.11626),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 0, 1, 0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_26xyn"]
-_data = {
-&"RESET": SubResource("Animation_dqjo4"),
-&"def": SubResource("Animation_vtvjq"),
-&"def_2": SubResource("Animation_26xyn")
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_vtvjq"]
-_data = {
-&"RESET": SubResource("Animation_dqjo4"),
-&"def": SubResource("Animation_vtvjq")
-}
 
 [sub_resource type="Animation" id="Animation_pess2"]
 length = 0.001
@@ -787,12 +600,10 @@ script/source = "extends AudioStreamPlayer
 func _ready() -> void:
 	volume_db = init_db
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.05)
-
-func set_target(target):
-	target_db = target
+	volume_db = lerp(volume_db, target_db, 0.1)
 "
 
 [sub_resource type="GDScript" id="GDScript_11t3l"]
@@ -807,19 +618,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-func play_all():
-	print(\"play all\")
-	for i in get_children():
-		i.playing = true
-
-func set_instrument(instru, target):
-	match instru:
-		\"bass\":
-			$bass_music.set_target(target)
-			print(\"bass:\", $bass_music.target_db)
-		\"drum1\":
-			$drum1_music.set_target(target)
 "
 
 [node name="Level1" type="Node2D"]
@@ -1059,38 +857,10 @@ shape = SubResource("RectangleShape2D_11t3l")
 debug_color = Color(0.856367, 0.363727, 0.108359, 0.42)
 
 [node name="CarSlice-sheet" type="Sprite2D" parent="move_along/dash_cutscene"]
-process_mode = 3
 position = Vector2(-166, 21)
 texture = ExtResource("12_gw2na")
 
-[node name="button" type="Sprite2D" parent="move_along/dash_cutscene"]
-z_index = 11
-position = Vector2(82, -96)
-texture = ExtResource("12_vtvjq")
-centered = false
-hframes = 2
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="move_along/dash_cutscene/button"]
-process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_26xyn")
-}
-autoplay = "def_2"
-
-[node name="button2" type="Sprite2D" parent="move_along/dash_cutscene"]
-process_mode = 3
-z_index = 11
-position = Vector2(206, -96)
-texture = ExtResource("13_26xyn")
-centered = false
-hframes = 2
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="move_along/dash_cutscene/button2"]
-process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_vtvjq")
-}
-autoplay = "def"
+[node name="Sprite2D" type="Sprite2D" parent="move_along/dash_cutscene"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -1118,12 +888,11 @@ target_db = -10.0
 script = SubResource("GDScript_11t3l")
 
 [node name="bass_music" type="AudioStreamPlayer" parent="music_player"]
-stream = ExtResource("16_1ejwl")
-volume_db = -13.0
+stream = ExtResource("14_11t3l")
 script = ExtResource("12_afxm8")
-target_db = -80.0
+target_db = -8.0
 
 [node name="drum1_music" type="AudioStreamPlayer" parent="music_player"]
-stream = ExtResource("17_dqjo4")
+stream = ExtResource("14_11t3l")
 script = ExtResource("12_afxm8")
-target_db = -80.0
+target_db = -8.0
