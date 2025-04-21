@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform vec4 pulse_color : source_color = vec4(1,0,0,1);
-uniform float instense : hint_range(0.0, 1.0, 0.0001) = 0.0625;
+uniform float instense : hint_range(0.0, 1.0, 0.0001) = 0.005;
 uniform float freq = 5.0;
 
 void vertex() {

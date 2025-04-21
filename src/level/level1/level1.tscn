@@ -1,16 +1,20 @@
-[gd_scene load_steps=44 format=3 uid="uid://cmhqt0spblavr"]
+[gd_scene load_steps=60 format=3 uid="uid://cmhqt0spblavr"]
 
 [ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="1_sit3r"]
 [ext_resource type="Texture2D" uid="uid://ca8aq5ai5ss8q" path="res://asset/level/level1/level1_bg_remake.png" id="2_6phvn"]
+[ext_resource type="Texture2D" uid="uid://c2kl45vf8b7u" path="res://asset/level/level1/danger_sign.png" id="3_0b4oc"]
 [ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="4_kp6mm"]
+[ext_resource type="Texture2D" uid="uid://cfocfvn4mf02s" path="res://asset/level/level1/trash.png" id="4_ya84d"]
 [ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="5_6phvn"]
 [ext_resource type="PackedScene" uid="uid://c3r0y08y1jx01" path="res://src/etc/boost.tscn" id="5_8wi4v"]
 [ext_resource type="Shader" uid="uid://dnj0ccl48ntu4" path="res://src/shader/pulse_color.gdshader" id="5_j8foc"]
 [ext_resource type="Texture2D" uid="uid://b0mkvp12h024h" path="res://asset/level/level1/rock_obs.png" id="5_pess2"]
 [ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="6_84p2n"]
 [ext_resource type="Texture2D" uid="uid://do7w1rhh1luad" path="res://asset/level/level1/blocker_obs.png" id="6_pess2"]
+[ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="7_26xyn"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="7_p7x62"]
 [ext_resource type="AudioStream" uid="uid://e4c0pi4n5heg" path="res://asset/sound/ambient/car_ambient.mp3" id="11_vmsyg"]
+[ext_resource type="Texture2D" uid="uid://cs0ckgvlkngtr" path="res://asset/level/level1/car_obs.png" id="12_3dty0"]
 [ext_resource type="Script" uid="uid://phvnha2mw3yo" path="res://src/level/level1/car_driving_ambient.gd" id="12_afxm8"]
 [ext_resource type="Texture2D" uid="uid://cglhuafuy61e8" path="res://asset/car/car_slice-sheet.png" id="12_gw2na"]
 [ext_resource type="AudioStream" uid="uid://c6n7i3m1775po" path="res://asset/sound/ambient/car_driving_sfx.mp3" id="12_mep31"]
@@ -19,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://c4d8hlbcepr8y" path="res://asset/sound/music/hawaii_radio.mp3" id="14_11t3l"]
 [ext_resource type="AudioStream" uid="uid://d4ityubxilpbk" path="res://asset/sound/music/edited_bass.mp3" id="16_1ejwl"]
 [ext_resource type="AudioStream" uid="uid://dqjknde55ufic" path="res://asset/sound/music/edited_drum1.mp3" id="17_dqjo4"]
+[ext_resource type="AudioStream" uid="uid://chk3k1208rg2l" path="res://asset/sound/music/brake_tagg_edited.mp3" id="22_txphl"]
 
 [sub_resource type="GDScript" id="GDScript_j8foc"]
 script/source = "extends Node2D
@@ -85,7 +90,12 @@ func _ready() -> void:
 	#]
 	#STOP SKIP
 	
-	var level1_seq1 = [
+	var level1_seq1 = [\"1-start\",
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"logo\"
+		},
 		{
 			\"type\":\"animation\",
 			\"animplayer\":$AnimationPlayer,
@@ -95,47 +105,47 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"[wave amp=40.0 freq=5.0 connected=0]Wheww~~~~~[/wave]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
 			\"target\":$main_ui
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"It been a while since I went on a roadtrip.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"text\":\"It's been a while since I went on a roadtrip.\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
-		{ #########################
+		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"Yeah.. me too.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
 			\"target\":$main_ui
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"And lucky I bought this beautiful car with a...\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
 		},
-		{ #########################
+		{
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"[rainbow freq=1.0 sat=1.0 val=0.9 speed=1.0]UNBELIEVEABLE\\nCHEAP PRICE![/rainbow]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
 		},
-		{ #########################
+		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"HAHA!\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
 		},
@@ -143,7 +153,7 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"Are you sure you know how to drive?\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
@@ -151,7 +161,7 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"I can remember how to start the engine and nothing else.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
 		},
@@ -159,15 +169,15 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"[wave amp=20.0 freq=5.0 connected=1][color=Dimgray](am I gonna die today?)[/color][/wave]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"Ok, so, you use your [color=blue]arrow keys[/color] to turn the car left and right.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"text\":\"Ok, so, you use your [color=Royalblue]arrow keys[/color] [img]asset/ui/dialog_arrow_key2.png[/img], [img]asset/ui/dialog_arrow_key1.png[/img] to turn the car.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
@@ -175,7 +185,7 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"Car's not gonna turn itself back, so don't forget to turn it back ok?\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
@@ -183,15 +193,15 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"And don't drive out of the road way.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"I think if you keep it slow you should fine.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"text\":\"I think if you keep it slow you should be fine.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
@@ -199,7 +209,7 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"Pfft! Easy peasy...\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
 		},
@@ -207,7 +217,7 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"Good.\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
@@ -222,9 +232,15 @@ func _ready() -> void:
 			\"arg\":[]
 		}
 	]
+	start_cutscene()
 	
 	SimpleDialog.set_sequence(level1_seq1)
-	SimpleDialog.execute_sequence()
+	if await SimpleDialog.execute_sequence() == false:
+		$AnimationPlayer.play(\"start\")
+		
+		await $AnimationPlayer.animation_finished
+		
+		end_cutscene()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -235,15 +251,15 @@ func _physics_process(delta: float) -> void:
 	if get_node_or_null(\"Car\"):
 		moving_speed = $Car.main_speed
 	else:
-		moving_scale = lerp(moving_scale, 0.0, 0.03)
+		moving_scale = lerp(moving_scale, 0.0, 0.03 * Global.time_scale)
 		$ambient_player.target_db = -80.0
 		$car_driving_ambient.target_db = -80.0
 	
-	$bg.autoscroll = Vector2(0, moving_speed * moving_scale)
+	$bg.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale)
 	
 	if moving:
 		for o in get_tree().get_nodes_in_group(\"move_along\"):
-			o.position.y += moving_speed * delta * moving_scale
+			o.position.y += moving_speed * delta * moving_scale * Global.time_scale
 	
 	if moving_scale < 0.01 and get_node_or_null(\"Car\") == null:
 		get_tree().change_scene_to_file(\"res://src/level/dead_scene/dead_scene.tscn\")
@@ -263,6 +279,10 @@ func end_cutscene():
 	$Car.enable_camera()
 "
 
+[sub_resource type="LabelSettings" id="LabelSettings_0b4oc"]
+font = ExtResource("7_26xyn")
+font_size = 8
+
 [sub_resource type="GDScript" id="GDScript_pess2"]
 script/source = "#grouping move along object and reparent to root scene when started
 extends Node2D
@@ -280,7 +300,7 @@ var cutscene2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	cutscene2 = [
+	cutscene2 = [\"1-2\",
 		{
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene,
@@ -297,16 +317,16 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"Hey! Why are you speeding!?\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I'm not????\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
+			\"text\":\"No, I didn't???\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{
@@ -329,7 +349,8 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene2)
-	SimpleDialog.execute_sequence()
+	if await SimpleDialog.execute_sequence() == false:
+		get_tree().current_scene.get_node(\"radio_ambient\").set_target(-20.0)
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7x62"]
@@ -342,7 +363,7 @@ var cutscene3
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	cutscene3 = [
+	cutscene3 = [\"1-3\",
 		{
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene,
@@ -371,23 +392,23 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"[shake rate=20.0 level=5 connected=1]HEY! SLOW DOWN!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
 			\"text\":\"[shake rate=20.0 level=5 connected=1]I'M TRYING!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
+			\"spr_frame\":SimpleDialog.DAVID_SHOCK,
+			\"glob\":Vector2(180,180),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"[color=red][shake rate=20.0 level=5 connected=1]WATCH OUT!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
 			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
@@ -411,7 +432,11 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene3)
-	SimpleDialog.execute_sequence()
+	if await SimpleDialog.execute_sequence() == false:
+		get_tree().current_scene.get_node(\"radio_ambient\").set_target(-50.0)
+		get_tree().current_scene.get_node(\"music_player\").play_all()
+		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"bass\", -13.0)
+		
 "
 
 [sub_resource type="GDScript" id="GDScript_vmsyg"]
@@ -421,7 +446,7 @@ var cutscene4
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	cutscene4 = [
+	cutscene4 = [\"1-4\",
 		{
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene,
@@ -444,23 +469,31 @@ func _ready() -> void:
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
 			\"text\":\"[shake rate=30.0 level=7 connected=1]I SAID SLOWDOWN!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(60,120),
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"[shake rate=30.0 level=7 connected=1]I CAN'T!!!![/shake]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
-			\"glob\":Vector2(160,140),
+			\"text\":\"[shake rate=30.0 level=7 connected=1]I CAN'T!!![/shake]\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"[shake rate=30.0 level=7 connected=1]THE BRAKE DOESN'T WORKS!!![/shake]\",
+			\"spr_frame\":SimpleDialog.DAVID_SHOCK,
+			\"glob\":Vector2(180,180),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"[color=red][shake rate=30.0 level=7 connected=1]HEY! WATCH OUT! DEAD AHEAD!!![/shake][/color]\",
-			\"spr_frame\":load(\"res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres\"),
+			\"text\":\"[shake rate=30.0 level=7 connected=1]ARGGGG!!![/shake]\",
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
 			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
@@ -484,23 +517,54 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene4)
-	SimpleDialog.execute_sequence()
+	if await SimpleDialog.execute_sequence() == false:
+		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"bass\", -7.0)
+		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"drum1\", -13.0)
 "
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
-radius = 46.0341
+[sub_resource type="GDScript" id="GDScript_vtvjq"]
+script/source = "extends Area2D
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8wi4v"]
-shader = ExtResource("6_84p2n")
+var cutscene5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_11t3l"]
-shader = ExtResource("5_j8foc")
-shader_parameter/pulse_color = Color(1, 0, 0, 1)
-shader_parameter/instense = 0.0625
-shader_parameter/freq = 5.0
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	cutscene5 = [\"1-5\",
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"start_cutscene\",
+			\"arg\":[]
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[shake rate=30.0 level=7 connected=1][color=red]HOW CAN WE PASS THOUGH THAT!!![/color][/shake]\",
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"end_cutscene\",
+			\"arg\":[]
+		}
+	]
+	
+	
+	connect(\"area_entered\", func(area) : run_cutscene())
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_pess2"]
-radius = 28.9671
+func run_cutscene():
+	print(\"run cutscene\")
+	
+	SimpleDialog.set_sequence(cutscene5)
+	SimpleDialog.execute_sequence()
+"
 
 [sub_resource type="GDScript" id="GDScript_rl107"]
 script/source = "extends Area2D
@@ -524,10 +588,10 @@ func _ready() -> void:
 		active = true)
 
 func _physics_process(delta: float) -> void:
-	Engine.time_scale = lerp(Engine.time_scale, t_scale_target, 0.1)
+	Global.time_scale = lerp(Global.time_scale, t_scale_target, 0.1)
 	
-	if abs(t_scale_target - Engine.time_scale) < 0.01:
-		Engine.time_scale = t_scale_target
+	if abs(t_scale_target - Global.time_scale) < 0.01:
+		Global.time_scale = t_scale_target
 	
 	$fade.material.set_shader_parameter(\"fade_val\", lerp($fade.material.get_shader_parameter(\"fade_val\"), target_fade_trans, 0.1))
 	
@@ -576,6 +640,8 @@ func player_go():
 	music.set_instrument(\"bass\", -7.0)
 	get_tree().current_scene.get_node(\"car_driving_ambient\").set_target(-15.0)
 	get_tree().current_scene.get_node(\"ambient_player\").set_target(-13.0)
+	
+	get_tree().current_scene.get_node(\"Car\").can_dash = true
 
 func player_arrive():
 	print(\"reach\")
@@ -627,6 +693,21 @@ shader_parameter/fade_val = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_11t3l"]
 size = Vector2(332, 20)
 
+[sub_resource type="Animation" id="Animation_dqjo4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="Animation" id="Animation_vtvjq"]
 resource_name = "def"
 length = 1.4
@@ -643,21 +724,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 0, 1, 0]
-}
-
-[sub_resource type="Animation" id="Animation_dqjo4"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_26xyn"]
@@ -685,11 +751,212 @@ _data = {
 &"def_2": SubResource("Animation_26xyn")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_3dty0"]
+font = ExtResource("7_26xyn")
+font_size = 8
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vtvjq"]
 _data = {
 &"RESET": SubResource("Animation_dqjo4"),
 &"def": SubResource("Animation_vtvjq")
 }
+
+[sub_resource type="GDScript" id="GDScript_26xyn"]
+script/source = "extends Area2D
+
+var cutscene6
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	cutscene6 = [\"1-6\",
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"start_cutscene\",
+			\"arg\":[]
+		},###############################################################
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"[color=Dimgray]. . .\",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[color=Dimgray]. . .\",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Wow.\",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Not \\\"Wow\\\" at all.\",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Guess we have to drive until the fuel rans out.\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[shake rate=20.0 level=5 connected=1]W H A A A A A A A A A A T ? ? ?[/shake]\",
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Yea, it's suck, I know.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"So with that plan, based on the map, with our new path...\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Our next station is the forest.\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"ARGGG...\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"What ever dude, let's just survive through this lame road.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Yea, I guess so.\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ ###############################################################
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"music_player\"),
+			\"func\":\"set_instrument\",
+			\"arg\":[\"full\", -7.0]
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"end_cutscene\",
+			\"arg\":[]
+		}
+	]
+	
+	
+	connect(\"area_entered\", func(area) : run_cutscene())
+
+func run_cutscene():
+	print(\"run cutscene\")
+	
+	
+	SimpleDialog.set_sequence(cutscene6)
+	if await SimpleDialog.execute_sequence() == false:
+		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"full\", -7.0)
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
+radius = 38.6388
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8wi4v"]
+shader = ExtResource("6_84p2n")
+
+[sub_resource type="GDScript" id="GDScript_3dty0"]
+script/source = "extends Area2D
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta: float) -> void:
+	position.y += 50 * delta
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26xyn"]
+size = Vector2(32.2239, 100.636)
+
+[sub_resource type="GDScript" id="GDScript_txphl"]
+script/source = "extends Area2D
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta: float) -> void:
+	position.y += 50 * delta
+"
+
+[sub_resource type="GDScript" id="GDScript_iylh6"]
+script/source = "extends Area2D
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta: float) -> void:
+	position.y += 50 * delta
+"
+
+[sub_resource type="GDScript" id="GDScript_0b4oc"]
+script/source = "extends Area2D
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta: float) -> void:
+	position.y += 50 * delta
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11t3l"]
+shader = ExtResource("5_j8foc")
+shader_parameter/pulse_color = Color(1, 0, 0, 1)
+shader_parameter/instense = 0.0625
+shader_parameter/freq = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pess2"]
+radius = 28.9671
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_26xyn"]
+radius = 40.5101
 
 [sub_resource type="Animation" id="Animation_pess2"]
 length = 0.001
@@ -728,6 +995,30 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("main_ui/ColorRect:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("main_ui/logo:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_6phvn"]
@@ -771,9 +1062,51 @@ tracks/2/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_0b4oc"]
+resource_name = "logo"
+length = 4.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("main_ui/logo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.4, 2.2, 3.5, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Car:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(160, 564)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pess2"]
 _data = {
 &"RESET": SubResource("Animation_pess2"),
+&"logo": SubResource("Animation_0b4oc"),
 &"start": SubResource("Animation_6phvn")
 }
 
@@ -817,9 +1150,13 @@ func set_instrument(instru, target):
 	match instru:
 		\"bass\":
 			$bass_music.set_target(target)
-			print(\"bass:\", $bass_music.target_db)
 		\"drum1\":
 			$drum1_music.set_target(target)
+		\"full\":
+			$bass_music.set_target(-65.0)
+			$drum1_music.set_target(-65.0)
+			$full_music.set_target(target)
+			
 "
 
 [node name="Level1" type="Node2D"]
@@ -828,23 +1165,96 @@ script = SubResource("GDScript_j8foc")
 
 [node name="main_ui" parent="." instance=ExtResource("5_6phvn")]
 
+[node name="logo" type="Node2D" parent="main_ui"]
+modulate = Color(1, 1, 1, 0)
+
+[node name="Label" type="Label" parent="main_ui/logo"]
+offset_left = 97.0
+offset_top = 143.0
+offset_right = 223.0
+offset_bottom = 166.0
+text = "A game by TrizG"
+label_settings = SubResource("LabelSettings_0b4oc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="main_ui/logo"]
+offset_left = 97.0
+offset_top = 154.0
+offset_right = 223.0
+offset_bottom = 177.0
+text = "for Thailand summer jam 2025"
+label_settings = SubResource("LabelSettings_0b4oc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="main_ui"]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0, 0, 0, 1)
+
 [node name="bg" type="Parallax2D" parent="."]
 z_index = -99
-repeat_size = Vector2(0, 320)
+repeat_size = Vector2(320, 1920)
 autoscroll = Vector2(0, 100)
+repeat_times = 2
 follow_viewport = false
 ignore_camera_scroll = true
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
-[node name="Icon" type="Sprite2D" parent="bg"]
+[node name="bg" type="Sprite2D" parent="bg"]
 texture = ExtResource("2_6phvn")
 centered = false
+
+[node name="bg2" type="Sprite2D" parent="bg"]
+position = Vector2(0, 320)
+texture = ExtResource("2_6phvn")
+centered = false
+
+[node name="bg3" type="Sprite2D" parent="bg"]
+position = Vector2(0, 640)
+texture = ExtResource("2_6phvn")
+centered = false
+
+[node name="bg4" type="Sprite2D" parent="bg"]
+position = Vector2(0, 960)
+texture = ExtResource("2_6phvn")
+centered = false
+
+[node name="bg5" type="Sprite2D" parent="bg"]
+position = Vector2(0, 1280)
+texture = ExtResource("2_6phvn")
+centered = false
+
+[node name="bg6" type="Sprite2D" parent="bg"]
+position = Vector2(0, 1600)
+texture = ExtResource("2_6phvn")
+centered = false
+
+[node name="DangerSign" type="Sprite2D" parent="bg"]
+position = Vector2(23, 214)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign3" type="Sprite2D" parent="bg"]
+position = Vector2(285, 1758)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign4" type="Sprite2D" parent="bg"]
+position = Vector2(306, 1782)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign2" type="Sprite2D" parent="bg"]
+position = Vector2(294, 1168.5)
+texture = ExtResource("4_ya84d")
 
 [node name="Car" parent="." instance=ExtResource("1_sit3r")]
 position = Vector2(160, 234)
 can_dash = false
 init_enable_cam = false
-left_wall = 48.0
-right_wall = 272.0
+left_wall = 40.0
+right_wall = 280.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 160)
@@ -857,7 +1267,7 @@ script = ExtResource("4_kp6mm")
 script = SubResource("GDScript_pess2")
 
 [node name="cutscene_2" type="Area2D" parent="move_along"]
-position = Vector2(0, -84)
+position = Vector2(0, -106)
 collision_layer = 0
 script = SubResource("GDScript_p7x62")
 metadata/_edit_group_ = true
@@ -867,17 +1277,8 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
-[node name="boost" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -43)
-
-[node name="boost2" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -425)
-
-[node name="boost3" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -1490)
-
 [node name="cutscene_3" type="Area2D" parent="move_along"]
-position = Vector2(0, -466)
+position = Vector2(0, -498)
 collision_layer = 0
 script = SubResource("GDScript_8wi4v")
 metadata/_edit_group_ = true
@@ -888,7 +1289,7 @@ shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
 [node name="cutscene_4" type="Area2D" parent="move_along"]
-position = Vector2(0, -1531)
+position = Vector2(0, -1564)
 collision_layer = 0
 script = SubResource("GDScript_vmsyg")
 metadata/_edit_group_ = true
@@ -898,145 +1299,20 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
-[node name="soft" type="Area2D" parent="move_along"]
-position = Vector2(239, -1991)
-collision_layer = 4
-collision_mask = 0
+[node name="cutscene_5" type="Area2D" parent="move_along"]
+position = Vector2(0, -2601)
+collision_layer = 0
+script = SubResource("GDScript_vtvjq")
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft"]
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_6phvn")
-
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft"]
-position = Vector2(2, -10)
-texture = ExtResource("6_pess2")
-
-[node name="shadow" type="Sprite2D" parent="move_along/soft"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
-texture = ExtResource("7_p7x62")
-
-[node name="soft3" type="Area2D" parent="move_along"]
-position = Vector2(159, -984)
-collision_layer = 4
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft3"]
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_6phvn")
-
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft3"]
-position = Vector2(2, -10)
-texture = ExtResource("6_pess2")
-
-[node name="shadow" type="Sprite2D" parent="move_along/soft3"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
-texture = ExtResource("7_p7x62")
-
-[node name="soft2" type="Area2D" parent="move_along"]
-position = Vector2(80, -2395)
-collision_layer = 4
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft2"]
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_6phvn")
-
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft2"]
-position = Vector2(2, -10)
-texture = ExtResource("6_pess2")
-
-[node name="shadow" type="Sprite2D" parent="move_along/soft2"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
-texture = ExtResource("7_p7x62")
-
-[node name="soft4" type="Area2D" parent="move_along"]
-position = Vector2(73, -2880)
-collision_layer = 4
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft4"]
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_6phvn")
-
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft4"]
-position = Vector2(2, -10)
-texture = ExtResource("6_pess2")
-
-[node name="shadow" type="Sprite2D" parent="move_along/soft4"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
-texture = ExtResource("7_p7x62")
-
-[node name="soft5" type="Area2D" parent="move_along"]
-position = Vector2(244, -2880)
-collision_layer = 4
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft5"]
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_6phvn")
-
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft5"]
-position = Vector2(2, -10)
-texture = ExtResource("6_pess2")
-
-[node name="shadow" type="Sprite2D" parent="move_along/soft5"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
-texture = ExtResource("7_p7x62")
-
-[node name="hard" type="Area2D" parent="move_along"]
-material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(157, -2979)
-collision_layer = 8
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="RockObs" type="Sprite2D" parent="move_along/hard"]
-use_parent_material = true
-position = Vector2(0, -7)
-texture = ExtResource("5_pess2")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard"]
-position = Vector2(0, 4)
-scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_pess2")
-debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
-
-[node name="shadow" type="Sprite2D" parent="move_along/hard"]
-modulate = Color(0, 0, 0, 0.25098)
-z_index = -10
-material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(-1, 6)
-scale = Vector2(0.84375, 0.359375)
-texture = ExtResource("7_p7x62")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_5"]
+position = Vector2(160.5, 0)
+shape = SubResource("RectangleShape2D_p7x62")
+debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
 [node name="dash_cutscene" type="Area2D" parent="move_along"]
 process_mode = 3
-position = Vector2(0, -2897)
+position = Vector2(0, -2930)
 collision_layer = 0
 script = SubResource("GDScript_rl107")
 
@@ -1077,6 +1353,13 @@ libraries = {
 }
 autoplay = "def_2"
 
+[node name="Label" type="Label" parent="move_along/dash_cutscene/button"]
+offset_left = 54.0
+offset_top = -23.0
+offset_right = 97.0
+text = "Double tap"
+label_settings = SubResource("LabelSettings_3dty0")
+
 [node name="button2" type="Sprite2D" parent="move_along/dash_cutscene"]
 process_mode = 3
 z_index = 11
@@ -1092,6 +1375,1243 @@ libraries = {
 }
 autoplay = "def"
 
+[node name="cutscene_6" type="Area2D" parent="move_along"]
+position = Vector2(0, -3176)
+collision_layer = 0
+script = SubResource("GDScript_26xyn")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_6"]
+position = Vector2(160.5, 0)
+shape = SubResource("RectangleShape2D_p7x62")
+debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
+
+[node name="soft" type="Area2D" parent="move_along"]
+position = Vector2(239, -1929)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft6" type="Area2D" parent="move_along"]
+position = Vector2(239, -2411)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft6"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft6"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft6"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft3" type="Area2D" parent="move_along"]
+position = Vector2(159, -984)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft3"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft3"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft3"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft2" type="Area2D" parent="move_along"]
+position = Vector2(68, -2148)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft2"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft2"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft2"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft4" type="Area2D" parent="move_along"]
+position = Vector2(73, -2913)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft4"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft4"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft4"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft5" type="Area2D" parent="move_along"]
+position = Vector2(244, -2913)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft5"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft5"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft5"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft7" type="Area2D" parent="move_along"]
+position = Vector2(245, -3555)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft7"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft7"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft7"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft8" type="Area2D" parent="move_along"]
+position = Vector2(75, -3555)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft8"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft8"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft8"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft10" type="Area2D" parent="move_along"]
+position = Vector2(160, -3815)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft10"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft10"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft10"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft11" type="Area2D" parent="move_along"]
+position = Vector2(245, -4075)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft11"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft11"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft11"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft12" type="Area2D" parent="move_along"]
+position = Vector2(75, -4075)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft12"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft12"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft12"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft27" type="Area2D" parent="move_along"]
+position = Vector2(215, -7342)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft27"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft27"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft27"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft28" type="Area2D" parent="move_along"]
+position = Vector2(105, -7105)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft28"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft28"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft28"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft43" type="Area2D" parent="move_along"]
+position = Vector2(48, -7022)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft43"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft43"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft43"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft44" type="Area2D" parent="move_along"]
+position = Vector2(-21, -6947)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft44"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft44"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft44"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft29" type="Area2D" parent="move_along"]
+position = Vector2(215, -7804)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft29"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft29"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft29"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft30" type="Area2D" parent="move_along"]
+position = Vector2(105, -7583)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft30"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft30"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft30"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft31" type="Area2D" parent="move_along"]
+position = Vector2(215, -8248)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft31"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft31"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft31"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft33" type="Area2D" parent="move_along"]
+position = Vector2(41, -8566)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft33"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft33"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft33"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft42" type="Area2D" parent="move_along"]
+position = Vector2(93, -8673)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft42"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft42"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft42"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft34" type="Area2D" parent="move_along"]
+position = Vector2(136, -8759)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft34"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft34"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft34"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft35" type="Area2D" parent="move_along"]
+position = Vector2(175, -8865)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft35"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft35"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft35"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft36" type="Area2D" parent="move_along"]
+position = Vector2(175, -8965)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft36"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft36"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft36"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft37" type="Area2D" parent="move_along"]
+position = Vector2(175, -9068)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft37"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft37"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft37"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft38" type="Area2D" parent="move_along"]
+position = Vector2(175, -9172)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft38"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft38"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft38"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft39" type="Area2D" parent="move_along"]
+position = Vector2(175, -9281)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft39"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft39"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft39"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft41" type="Area2D" parent="move_along"]
+position = Vector2(61, -9340)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft41"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft41"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft41"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft40" type="Area2D" parent="move_along"]
+position = Vector2(263, -9389)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft40"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft40"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft40"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft32" type="Area2D" parent="move_along"]
+position = Vector2(105, -8025)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft32"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft32"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft32"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft13" type="Area2D" parent="move_along"]
+position = Vector2(75, -4529)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft13"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft13"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft13"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft14" type="Area2D" parent="move_along"]
+position = Vector2(117, -4637)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft14"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft14"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft14"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft15" type="Area2D" parent="move_along"]
+position = Vector2(143, -4738)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft15"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft15"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft15"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft16" type="Area2D" parent="move_along"]
+position = Vector2(267, -4889)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft16"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft16"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft16"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft17" type="Area2D" parent="move_along"]
+position = Vector2(193, -4950)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft17"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft17"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft17"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft18" type="Area2D" parent="move_along"]
+position = Vector2(20, -4715)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft18"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft18"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft18"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft19" type="Area2D" parent="move_along"]
+position = Vector2(6, -4601)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft19"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft19"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft19"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft20" type="Area2D" parent="move_along"]
+position = Vector2(265, -5264)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft20"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft20"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft20"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft21" type="Area2D" parent="move_along"]
+position = Vector2(186, -5343)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft21"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft21"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft21"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft22" type="Area2D" parent="move_along"]
+position = Vector2(54, -5482)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft22"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft22"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft22"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft23" type="Area2D" parent="move_along"]
+position = Vector2(243, -6024)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_3dty0")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft23"]
+position = Vector2(1.5, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft23"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 1
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft23"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="move_along/soft23"]
+position = Vector2(1, 11)
+
+[node name="soft25" type="Area2D" parent="move_along"]
+position = Vector2(128, -6202)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_txphl")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft25"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft25"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 2
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft25"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D2" type="VisibleOnScreenEnabler2D" parent="move_along/soft25"]
+position = Vector2(1, 7)
+
+[node name="soft26" type="Area2D" parent="move_along"]
+position = Vector2(74, -6159)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_iylh6")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft26"]
+position = Vector2(1, -8)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft26"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 1
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft26"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D3" type="VisibleOnScreenEnabler2D" parent="move_along/soft26"]
+position = Vector2(2, 9)
+
+[node name="soft24" type="Area2D" parent="move_along"]
+position = Vector2(186, -6072)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_0b4oc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft24"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft24"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft24"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D4" type="VisibleOnScreenEnabler2D" parent="move_along/soft24"]
+position = Vector2(1, 10)
+
+[node name="hard" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(157, -3012)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_pess2")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard2" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(160, -4346)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard2"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard2"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard2"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard3" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(238, -5751)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard3"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard3"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard3"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard4" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(160, -14913)
+scale = Vector2(3.968, 3.968)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard4"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard4"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard4"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard5" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(83, -9663)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard5"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard5"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard5"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard6" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(233, -9818)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard6"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard6"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard6"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard7" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(177, -9873)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard7"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard7"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard7"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard8" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(78, -10064)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard8"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard8"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard8"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard9" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(130, -10121)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard9"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard9"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard9"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="boost" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -43)
+
+[node name="boost2" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -425)
+
+[node name="boost3" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -1490)
+
+[node name="boost4" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -3883)
+
+[node name="boost5" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -6624)
+
+[node name="boost6" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -9484)
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_pess2")
@@ -1099,17 +2619,19 @@ libraries = {
 
 [node name="ambient_player" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_vmsyg")
-volume_db = -10.0
+volume_db = -80.0
 autoplay = true
 script = SubResource("GDScript_afxm8")
 
 [node name="car_driving_ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_mep31")
+volume_db = -80.0
 autoplay = true
 script = ExtResource("12_afxm8")
 
 [node name="radio_ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_11t3l")
+volume_db = -80.0
 autoplay = true
 script = ExtResource("12_afxm8")
 target_db = -10.0
@@ -1127,3 +2649,9 @@ target_db = -80.0
 stream = ExtResource("17_dqjo4")
 script = ExtResource("12_afxm8")
 target_db = -80.0
+
+[node name="full_music" type="AudioStreamPlayer" parent="music_player"]
+stream = ExtResource("22_txphl")
+script = ExtResource("12_afxm8")
+target_db = -70.0
+init_db = -70.0

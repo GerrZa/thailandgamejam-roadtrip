@@ -37,7 +37,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
-	if Input.is_action_just_pressed(\"ui_accept\") and least_time < 0.0 and focus:
+	if (Input.is_action_just_pressed(\"ui_right\") or Input.is_action_just_pressed(\"ui_left\") or Input.is_action_just_pressed(\"ui_up\") or Input.is_action_just_pressed(\"ui_down\") or Input.is_action_just_pressed(\"ui_accept\")) and least_time < 0.0 and focus:
 		if text_anim_finish == false:
 			skip_animation()
 		else:
@@ -112,6 +112,8 @@ func new_dialog(text := \"no text\", spr_frame = $char.sprite_frames):
 	float_vis_char = 0.0
 	text_anim_finish = false
 	focus = true
+	
+	$char.sprite_frames = spr_frame
 	
 	least_time = DEF_LEAST_T
 
@@ -258,4 +260,3 @@ label_settings = SubResource("LabelSettings_wg6oo")
 stream = ExtResource("5_re5ak")
 volume_db = -7.0
 bus = &"dialog"
-playback_type = 1

@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://d3trw7xnra4d5"]
+
+[ext_resource type="Texture2D" uid="uid://b1ponrnd20wt6" path="res://asset/ui/dialog_face/david_smile.png" id="1_n6nvf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avxww"]
+atlas = ExtResource("1_n6nvf")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_llv1l"]
+atlas = ExtResource("1_n6nvf")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no3l1"]
+atlas = ExtResource("1_n6nvf")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcv2o"]
+atlas = ExtResource("1_n6nvf")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypumr"]
+atlas = ExtResource("1_n6nvf")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avxww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_llv1l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_no3l1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcv2o")
+}],
+"loop": true,
+"name": &"say",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypumr")
+}],
+"loop": true,
+"name": &"shut",
+"speed": 5.0
+}]

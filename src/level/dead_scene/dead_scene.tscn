@@ -1,7 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://c1svtpi40gado"]
+[gd_scene load_steps=12 format=3 uid="uid://c1svtpi40gado"]
 
 [ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="1_5rqdl"]
 [ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="2_eitcn"]
+[ext_resource type="AudioStream" uid="uid://plm2cpypyr3s" path="res://asset/sound/sfx/boost_hit1.mp3" id="3_ajj15"]
+[ext_resource type="AudioStream" uid="uid://dumv5meyi7v60" path="res://asset/sound/sfx/one_hoot_car.mp3" id="4_bwpd1"]
 
 [sub_resource type="GDScript" id="GDScript_5rqdl"]
 script/source = "extends Node2D
@@ -132,6 +134,34 @@ tracks/3/keys = {
 "method": &"shake"
 }]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AudioStreamPlayer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AudioStreamPlayer2")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ajj15"]
 _data = {
@@ -174,7 +204,7 @@ visible = false
 offset_top = 203.0
 offset_right = 320.0
 offset_bottom = 320.0
-text = "press [ENTER] to try again..."
+text = "press any button to try again..."
 label_settings = SubResource("LabelSettings_ajj15")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -191,3 +221,9 @@ drag_left_margin = 1.0
 drag_right_margin = 1.0
 editor_draw_limits = true
 script = ExtResource("2_eitcn")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ajj15")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_bwpd1")

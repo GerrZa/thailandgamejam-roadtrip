@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://bi8jrb22tiv5x"]
+
+[ext_resource type="Texture2D" uid="uid://b6kwk381ut4fb" path="res://asset/ui/dialog_face/grace_shock.png" id="1_xxcaa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekg0c"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic8pc"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t6kx"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdea8"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3bpca"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekg0c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ic8pc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6t6kx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdea8")
+}],
+"loop": true,
+"name": &"say",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3bpca")
+}],
+"loop": true,
+"name": &"shut",
+"speed": 5.0
+}]

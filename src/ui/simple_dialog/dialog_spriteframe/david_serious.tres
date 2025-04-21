@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://bcpypw0ur5fwr"]
+
+[ext_resource type="Texture2D" uid="uid://dqkw3kqk6wssr" path="res://asset/ui/dialog_face/david_serious.png" id="1_57gva"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deq4c"]
+atlas = ExtResource("1_57gva")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gi0k2"]
+atlas = ExtResource("1_57gva")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m86m0"]
+atlas = ExtResource("1_57gva")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sjga"]
+atlas = ExtResource("1_57gva")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o67gu"]
+atlas = ExtResource("1_57gva")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_deq4c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gi0k2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m86m0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4sjga")
+}],
+"loop": true,
+"name": &"say",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o67gu")
+}],
+"loop": true,
+"name": &"shut",
+"speed": 5.0
+}]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cvdjeuqi55t5a"]
+[gd_scene load_steps=29 format=3 uid="uid://cvdjeuqi55t5a"]
 
 [ext_resource type="Texture2D" uid="uid://cglhuafuy61e8" path="res://asset/car/car_slice-sheet.png" id="1_6mq6v"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="3_ikygv"]
@@ -8,7 +8,10 @@
 [ext_resource type="AudioStream" uid="uid://plm2cpypyr3s" path="res://asset/sound/sfx/boost_hit1.mp3" id="6_01h6g"]
 [ext_resource type="AudioStream" uid="uid://bimcoisid521i" path="res://asset/sound/sfx/boost_bass1.mp3" id="7_6mq6v"]
 [ext_resource type="AudioStream" uid="uid://dye1e273plus" path="res://asset/sound/sfx/car_damage_sfx1.mp3" id="8_5j7d0"]
+[ext_resource type="AudioStream" uid="uid://dt67f6oqjq11k" path="res://asset/sound/sfx/car_dash.mp3" id="9_3uykb"]
 [ext_resource type="AudioStream" uid="uid://c7n1gefrdmotf" path="res://asset/sound/sfx/car_big_turn_sfx2.mp3" id="9_gevnm"]
+[ext_resource type="AudioStream" uid="uid://cxtlrqgbjto8i" path="res://asset/sound/sfx/car_hoot.mp3" id="10_xppov"]
+[ext_resource type="Texture2D" uid="uid://bitgolvw7ofrm" path="res://asset/car/hooting_icon.png" id="12_8607x"]
 
 [sub_resource type="GDScript" id="GDScript_tmscv"]
 script/source = "extends Node2D
@@ -107,7 +110,7 @@ func _physics_process(delta: float) -> void:
 	#main_speed_acc_cd -= delta
 	
 	#dash
-	if Input.is_action_just_pressed(\"ui_right\") and enable_control:
+	if Input.is_action_just_pressed(\"ui_right\") and Input.is_action_pressed(\"ui_left\") == false and enable_control:
 		if press_dir == \"right\" and press_delta > 0.0 and dash_cd < 0.0:
 			press_delta = 0.0
 			#dash_cd = DEF_DASH_CD
@@ -115,7 +118,7 @@ func _physics_process(delta: float) -> void:
 		
 		press_dir = \"right\"
 		press_delta = MAX_PRESS_DELTA
-	elif Input.is_action_just_pressed(\"ui_left\") and enable_control:
+	elif Input.is_action_just_pressed(\"ui_left\") and Input.is_action_pressed(\"ui_right\") == false and enable_control:
 		if press_dir == \"left\" and press_delta > 0.0 and dash_cd < 0.0:
 			press_delta = 0.0
 			#dash_cd = DEF_DASH_CD
@@ -125,23 +128,23 @@ func _physics_process(delta: float) -> void:
 		press_delta = MAX_PRESS_DELTA
 	
 	press_delta -= delta
-	dash_cd -= delta
+	dash_cd -= delta * Global.time_scale
 	
 	#moving input
 	var new_acc = acc
+	if abs(apply_speed) > 175.0 and sign(apply_speed) == sign(x_input):
+		new_acc/=1.5
+		if abs(apply_speed) > 200.0:
+			new_acc/=1.5
 	
 	if enable_control:
 		x_input = Input.get_axis(\"ui_left\", \"ui_right\")
-		speed += x_input * new_acc * Engine.time_scale
+		speed += x_input * new_acc * Global.time_scale
 	
-	if sign(apply_speed) != sign(x_input) and abs(apply_speed) > 100.0 and sign(x_input) != 0:
-		#$car_turn_sfx.set_target(-25.0 + -13 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.0))
-		#$car_turn_sfx.volume_db = -17.0 + (13 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.0))
-		$car_turn_sfx.set_target(-17.0 + (13 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
+	if sign(apply_speed) != sign(x_input) and abs(apply_speed) > 30.0 and sign(x_input) != 0:
+		$car_turn_sfx.set_target((13 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
 	else:
-		#$car_turn_sfx.set_target(-80.0)
-		#$car_turn_sfx.volume_db = -80.0
-		$car_turn_sfx.set_target(-40.0)
+		$car_turn_sfx.set_target(-80.0)
 	
 	speed = clamp(speed, -MAX_SPEED, MAX_SPEED)
 	if dash_duration > 0.0:
@@ -150,12 +153,12 @@ func _physics_process(delta: float) -> void:
 		if enable_control:
 			apply_speed = speed
 	
-	position.x += apply_speed * delta
+	position.x += apply_speed * delta * Global.time_scale
 	
 	if x_input == 0:
-		speed = lerp(speed, 0.0, 0.0125 + (0.025 * abs(speed) / MAX_SPEED) * Engine.time_scale)
+		speed = lerp(speed, 0.0, 0.0125 + (0.025 * abs(speed) / MAX_SPEED) * Global.time_scale)
 	
-	dash_duration -= delta
+	dash_duration -= delta * Global.time_scale
 	debug_x_pos = position.x
 	
 	#wall detect
@@ -169,19 +172,33 @@ func _physics_process(delta: float) -> void:
 	
 	position.x = clamp(position.x, left_wall, right_wall)
 	
-	print($car_turn_sfx.volume_db)
+	print(apply_speed)
 	
 	#rotate car
 	for s in $SubViewport/car_slice.get_children():
-		s.rotation_degrees = lerp(s.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Engine.time_scale)
-	$soft_hit.rotation_degrees = lerp($soft_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Engine.time_scale)
-	$hard_hit.rotation_degrees = lerp($hard_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Engine.time_scale)
+		s.rotation_degrees = lerp(s.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
+	$soft_hit.rotation_degrees = lerp($soft_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
+	$hard_hit.rotation_degrees = lerp($hard_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
+	
+	if Input.is_action_pressed(\"ui_up\") and enable_control:
+		#$car_hoot_sfx.set_target(0.0)
+		$car_hoot_sfx.volume_db = lerp($car_hoot_sfx.volume_db, 0.0, 0.5)
+		$modulate_control/car_render.scale = Vector2(1.25,0.8)
+		$HootingIcon.modulate.a = lerp($HootingIcon.modulate.a, 1.0, 0.5)
+	else:
+		#$car_hoot_sfx.set_target(-80.0)
+		$car_hoot_sfx.volume_db = lerp($car_hoot_sfx.volume_db, -80.0, 0.5)
+		$HootingIcon.modulate.a = lerp($HootingIcon.modulate.a, 0.0, 0.1)
+	
+	if Input.is_action_just_pressed(\"ui_down\") and enable_control:
+		hurt(3)
 
 func dash():
 	if can_dash == false:
 		return
 	
 	$modulate_control/car_render.scale = Vector2(1.4,0.8)
+	$car_dash_sfx.play()
 	
 	match press_dir:
 		\"right\":
@@ -198,15 +215,15 @@ func dash():
 
 func force_dash(dir):
 	speed = dir * abs(speed)
-	
 	apply_speed = dir * DEF_DASH_SPEED * 2
 	dash_cd = DEF_DASH_CD
 	dash_duration = DEF_DASH_DURATION
+	$car_dash_sfx.play()
 
 func accelerate():
 	main_speed += 15
 	DEF_DASH_CD *= 0.95
-	acc += 0.5
+	#acc += 0.1
 	acc = clamp(acc, 0.0, 18.0)
 	$modulate_control/car_render.scale = Vector2(0.8, 1.2)
 	$camera_control.zoomin(clamp(1 + 0.01 * ((main_speed-20) / 20), 0.0, 1.3))
@@ -287,7 +304,7 @@ void vertex() {
 void fragment() {
 	float pixelSizeX = 1.0 / width;
 	float pixelSizeY = 1.0 / height;
-	
+
 	if (COLOR.a > 0.0 && UV.y >= 1.0 - progress){
 		COLOR = mix(COLOR, vec4(1,1,1,0.3), 0.2 + (0.5 * progress));
 	}
@@ -405,7 +422,7 @@ func zoomin(target):
 [sub_resource type="GDScript" id="GDScript_gevnm"]
 script/source = "extends AudioStreamPlayer
 
-var target_db = -80.0
+@export var target_db = -80.0
 
 func _physics_process(delta: float) -> void:
 	volume_db = lerp(volume_db, target_db, 0.5)
@@ -531,11 +548,29 @@ pitch_scale = 0.9
 mix_target = 1
 bus = &"sfx"
 
+[node name="car_dash_sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_3uykb")
+volume_db = -3.0
+pitch_scale = 1.4
+bus = &"sfx"
+
 [node name="car_turn_sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_gevnm")
-volume_db = -40.0
+volume_db = -80.0
 pitch_scale = 0.85
 autoplay = true
 bus = &"sfx"
 parameters/looping = true
 script = SubResource("GDScript_gevnm")
+
+[node name="car_hoot_sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_xppov")
+volume_db = -80.0
+pitch_scale = 1.2
+autoplay = true
+bus = &"sfx"
+parameters/looping = true
+
+[node name="HootingIcon" type="Sprite2D" parent="."]
+position = Vector2(1, -26)
+texture = ExtResource("12_8607x")

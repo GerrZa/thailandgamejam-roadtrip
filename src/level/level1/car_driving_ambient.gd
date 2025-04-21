@@ -9,7 +9,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.05)
+	volume_db = lerp(volume_db, target_db, 0.1)
 
 func set_target(target):
 	target_db = target

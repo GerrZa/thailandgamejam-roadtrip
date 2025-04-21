@@ -4,6 +4,9 @@ var dialogs = {}
 var dialog_box = preload("res://src/ui/simple_dialog/dialog_box.tscn")
 
 var sequence = []
+var dialog_log = []
+
+var no_replay = true
 
 #NOTE
 #Sequence guide
@@ -23,16 +26,45 @@ enum DialogFuncList {
 
 signal sequence_finish
 
+var debug_no_dialog = false
+
+#sprite_frame
+const GRACE_NORMAL_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_normal.tres")
+const GRACE_SMILE_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_smile.tres")
+const GRACE_SHOCK = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_shock.tres")
+const GRACE_SERIOUS = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_serious.tres")
+const DAVID_NORMAL_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_normal.tres")
+const DAVID_SMILE_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_smile.tres")
+const DAVID_SHOCK = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_shock.tres")
+const DAVID_SERIOUS = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_serious.tres")
+
 func set_sequence(seq):
 	sequence = seq
 
 func execute_sequence():
+	#print(dialog_log.has(sequence[0]))
+	
+	if (no_replay and dialog_log.has(sequence[0])): #for no replaying dialog, using first element as id
+		print("no replay bro")
+		return false
+	
+	if debug_no_dialog:
+		print("debug mode")
+		return false
+	
 	for i in range(sequence.size()):
+		if i == 0 and sequence[i] is String:
+			dialog_log.append(sequence[i])
+			continue
+		elif sequence[0] is not String:
+			"enter id in the first element"
+			return false
+		
 		var seq = sequence[i] as Dictionary
 		
 		if seq.has("type") == false:
 			print("notype")
-			return
+			return false
 		
 		#print(seq["type"])
 		
@@ -57,7 +89,9 @@ func execute_sequence():
 					
 					await seq["animplayer"].animation_finished
 	
+	sequence = []
 	emit_signal("sequence_finish")
+	return true
 
 func new_dialog(char_name : String, text : String, char_spr : SpriteFrames = null, glob_pos := Vector2(0, 0), target_parent = null):
 	if target_parent == null:
