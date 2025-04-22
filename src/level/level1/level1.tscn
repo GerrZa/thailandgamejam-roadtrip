@@ -33,7 +33,6 @@ var moving_speed = 0.0
 
 @export var moving = false
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#ungroupping all moving object
@@ -91,11 +90,6 @@ func _ready() -> void:
 	#STOP SKIP
 	
 	var level1_seq1 = [\"1-start\",
-		{
-			\"type\":\"animation\",
-			\"animplayer\":$AnimationPlayer,
-			\"animname\":\"logo\"
-		},
 		{
 			\"type\":\"animation\",
 			\"animplayer\":$AnimationPlayer,
@@ -235,12 +229,13 @@ func _ready() -> void:
 	start_cutscene()
 	
 	SimpleDialog.set_sequence(level1_seq1)
-	if await SimpleDialog.execute_sequence() == false:
+	SimpleDialog.execute_sequence(func():
 		$AnimationPlayer.play(\"start\")
 		
 		await $AnimationPlayer.animation_finished
 		
 		end_cutscene()
+		)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -349,8 +344,7 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene2)
-	if await SimpleDialog.execute_sequence() == false:
-		get_tree().current_scene.get_node(\"radio_ambient\").set_target(-20.0)
+	SimpleDialog.execute_sequence(func(): get_tree().current_scene.get_node(\"radio_ambient\").set_target(-20.0))
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7x62"]
@@ -432,10 +426,11 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene3)
-	if await SimpleDialog.execute_sequence() == false:
+	SimpleDialog.execute_sequence(func():
 		get_tree().current_scene.get_node(\"radio_ambient\").set_target(-50.0)
 		get_tree().current_scene.get_node(\"music_player\").play_all()
 		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"bass\", -13.0)
+		)
 		
 "
 
@@ -517,9 +512,10 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene4)
-	if await SimpleDialog.execute_sequence() == false:
+	SimpleDialog.execute_sequence(func():
 		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"bass\", -7.0)
 		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"drum1\", -13.0)
+		)
 "
 
 [sub_resource type="GDScript" id="GDScript_vtvjq"]
@@ -563,7 +559,7 @@ func run_cutscene():
 	print(\"run cutscene\")
 	
 	SimpleDialog.set_sequence(cutscene5)
-	SimpleDialog.execute_sequence()
+	SimpleDialog.execute_sequence(func():pass)
 "
 
 [sub_resource type="GDScript" id="GDScript_rl107"]
@@ -897,8 +893,9 @@ func run_cutscene():
 	
 	
 	SimpleDialog.set_sequence(cutscene6)
-	if await SimpleDialog.execute_sequence() == false:
+	SimpleDialog.execute_sequence(func():
 		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"full\", -7.0)
+		)
 "
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
@@ -1006,7 +1003,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(0, 0, 0, 1)]
+"values": [Color(0, 0, 0, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1019,47 +1016,6 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_6phvn"]
-resource_name = "start"
-length = 2.4
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Car:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.9),
-"transitions": PackedFloat32Array(-1.8025, 1),
-"update": 0,
-"values": [Vector2(160, 355), Vector2(160, 234)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Car:enable_control")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:moving")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_0b4oc"]
@@ -1101,6 +1057,47 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(160, 564)]
+}
+
+[sub_resource type="Animation" id="Animation_6phvn"]
+resource_name = "start"
+length = 2.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Car:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.9),
+"transitions": PackedFloat32Array(-1.8025, 1),
+"update": 0,
+"values": [Vector2(160, 355), Vector2(160, 234)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Car:enable_control")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:moving")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pess2"]
@@ -1191,7 +1188,7 @@ vertical_alignment = 1
 [node name="ColorRect" type="ColorRect" parent="main_ui"]
 offset_right = 320.0
 offset_bottom = 320.0
-color = Color(0, 0, 0, 1)
+color = Color(0, 0, 0, 0)
 
 [node name="bg" type="Parallax2D" parent="."]
 z_index = -99
@@ -1717,7 +1714,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft29" type="Area2D" parent="move_along"]
-position = Vector2(215, -7804)
+position = Vector2(215, -7939)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1739,7 +1736,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft30" type="Area2D" parent="move_along"]
-position = Vector2(105, -7583)
+position = Vector2(105, -7652)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1761,7 +1758,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft31" type="Area2D" parent="move_along"]
-position = Vector2(215, -8248)
+position = Vector2(215, -8501)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1783,7 +1780,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft33" type="Area2D" parent="move_along"]
-position = Vector2(41, -8566)
+position = Vector2(41, -8819)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1805,7 +1802,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft42" type="Area2D" parent="move_along"]
-position = Vector2(93, -8673)
+position = Vector2(93, -8926)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1827,7 +1824,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft34" type="Area2D" parent="move_along"]
-position = Vector2(136, -8759)
+position = Vector2(136, -9012)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1849,7 +1846,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft35" type="Area2D" parent="move_along"]
-position = Vector2(175, -8865)
+position = Vector2(175, -9118)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1871,7 +1868,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft36" type="Area2D" parent="move_along"]
-position = Vector2(175, -8965)
+position = Vector2(175, -9218)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1893,7 +1890,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft37" type="Area2D" parent="move_along"]
-position = Vector2(175, -9068)
+position = Vector2(175, -9321)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1915,7 +1912,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft38" type="Area2D" parent="move_along"]
-position = Vector2(175, -9172)
+position = Vector2(182, -9425)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1937,7 +1934,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft39" type="Area2D" parent="move_along"]
-position = Vector2(175, -9281)
+position = Vector2(191, -9534)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1959,7 +1956,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft41" type="Area2D" parent="move_along"]
-position = Vector2(61, -9340)
+position = Vector2(61, -9593)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -1981,7 +1978,7 @@ scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
 [node name="soft40" type="Area2D" parent="move_along"]
-position = Vector2(263, -9389)
+position = Vector2(285, -9739)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2002,8 +1999,536 @@ position = Vector2(1, -2)
 scale = Vector2(0.84375, 0.4375)
 texture = ExtResource("7_p7x62")
 
+[node name="soft49" type="Area2D" parent="move_along"]
+position = Vector2(21, -14474)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft49"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft49"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft49"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft71" type="Area2D" parent="move_along"]
+position = Vector2(-8, -14424)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft71"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft71"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft71"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft72" type="Area2D" parent="move_along"]
+position = Vector2(-44, -14364)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft72"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft72"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft72"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft50" type="Area2D" parent="move_along"]
+position = Vector2(196, -14474)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft50"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft50"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft50"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft73" type="Area2D" parent="move_along"]
+position = Vector2(241, -14391)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft73"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft73"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft73"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft74" type="Area2D" parent="move_along"]
+position = Vector2(277, -14311)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft74"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft74"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft74"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft75" type="Area2D" parent="move_along"]
+position = Vector2(315, -14233)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft75"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft75"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft75"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft55" type="Area2D" parent="move_along"]
+position = Vector2(63, -14568)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft55"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft55"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft55"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft56" type="Area2D" parent="move_along"]
+position = Vector2(238, -14568)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft56"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft56"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft56"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft57" type="Area2D" parent="move_along"]
+position = Vector2(100, -14667)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft57"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft57"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft57"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft58" type="Area2D" parent="move_along"]
+position = Vector2(275, -14667)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft58"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft58"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft58"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft59" type="Area2D" parent="move_along"]
+position = Vector2(117, -14782)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft59"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft59"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft59"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft60" type="Area2D" parent="move_along"]
+position = Vector2(292, -14782)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft60"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft60"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft60"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft61" type="Area2D" parent="move_along"]
+position = Vector2(106, -14895)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft61"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft61"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft61"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft62" type="Area2D" parent="move_along"]
+position = Vector2(281, -14895)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft62"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft62"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft62"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft63" type="Area2D" parent="move_along"]
+position = Vector2(59, -15006)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft63"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft63"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft63"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft64" type="Area2D" parent="move_along"]
+position = Vector2(234, -15006)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft64"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft64"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft64"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft65" type="Area2D" parent="move_along"]
+position = Vector2(34, -15119)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft65"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft65"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft65"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft66" type="Area2D" parent="move_along"]
+position = Vector2(209, -15119)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft66"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft66"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft66"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft67" type="Area2D" parent="move_along"]
+position = Vector2(36, -15222)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft67"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft67"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft67"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft68" type="Area2D" parent="move_along"]
+position = Vector2(211, -15222)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft68"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft68"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft68"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft69" type="Area2D" parent="move_along"]
+position = Vector2(65, -15323)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft69"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft69"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft69"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft70" type="Area2D" parent="move_along"]
+position = Vector2(240, -15323)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft70"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft70"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft70"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft51" type="Area2D" parent="move_along"]
+position = Vector2(160, -11795)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft51"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft51"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft51"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
 [node name="soft32" type="Area2D" parent="move_along"]
-position = Vector2(105, -8025)
+position = Vector2(105, -8212)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2017,6 +2542,116 @@ position = Vector2(2, -10)
 texture = ExtResource("6_pess2")
 
 [node name="shadow" type="Sprite2D" parent="move_along/soft32"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft76" type="Area2D" parent="move_along"]
+position = Vector2(215, -15975)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft76"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft76"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft76"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft77" type="Area2D" parent="move_along"]
+position = Vector2(215, -16572)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft77"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft77"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft77"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft78" type="Area2D" parent="move_along"]
+position = Vector2(105, -16285)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft78"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft78"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft78"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft79" type="Area2D" parent="move_along"]
+position = Vector2(215, -17134)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft79"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft79"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft79"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(1, -2)
+scale = Vector2(0.84375, 0.4375)
+texture = ExtResource("7_p7x62")
+
+[node name="soft80" type="Area2D" parent="move_along"]
+position = Vector2(105, -16845)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft80"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft80"]
+position = Vector2(2, -10)
+texture = ExtResource("6_pess2")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft80"]
 modulate = Color(0, 0, 0, 0.25098)
 z_index = -10
 material = SubResource("ShaderMaterial_8wi4v")
@@ -2359,6 +2994,206 @@ texture = ExtResource("7_p7x62")
 [node name="VisibleOnScreenEnabler2D4" type="VisibleOnScreenEnabler2D" parent="move_along/soft24"]
 position = Vector2(1, 10)
 
+[node name="soft45" type="Area2D" parent="move_along"]
+position = Vector2(243, -10957)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_3dty0")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft45"]
+position = Vector2(1.5, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft45"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft45"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="move_along/soft45"]
+position = Vector2(1, 11)
+
+[node name="soft46" type="Area2D" parent="move_along"]
+position = Vector2(128, -11066)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_txphl")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft46"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft46"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 2
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft46"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D2" type="VisibleOnScreenEnabler2D" parent="move_along/soft46"]
+position = Vector2(1, 7)
+
+[node name="soft47" type="Area2D" parent="move_along"]
+position = Vector2(74, -11285)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_iylh6")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft47"]
+position = Vector2(1, -8)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft47"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft47"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D3" type="VisibleOnScreenEnabler2D" parent="move_along/soft47"]
+position = Vector2(2, 9)
+
+[node name="soft52" type="Area2D" parent="move_along"]
+position = Vector2(243, -13335)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_3dty0")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft52"]
+position = Vector2(1.5, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft52"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 2
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft52"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="move_along/soft52"]
+position = Vector2(1, 11)
+
+[node name="soft53" type="Area2D" parent="move_along"]
+position = Vector2(74, -13335)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_iylh6")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft53"]
+position = Vector2(1, -8)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft53"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft53"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D3" type="VisibleOnScreenEnabler2D" parent="move_along/soft53"]
+position = Vector2(2, 9)
+
+[node name="soft48" type="Area2D" parent="move_along"]
+position = Vector2(186, -11009)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_0b4oc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft48"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft48"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 1
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft48"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D4" type="VisibleOnScreenEnabler2D" parent="move_along/soft48"]
+position = Vector2(1, 10)
+
+[node name="soft54" type="Area2D" parent="move_along"]
+position = Vector2(157, -13073)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_txphl")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft54"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft54"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 2
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft54"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D2" type="VisibleOnScreenEnabler2D" parent="move_along/soft54"]
+position = Vector2(1, 7)
+
 [node name="hard" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
 position = Vector2(157, -3012)
@@ -2439,7 +3274,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard4" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(160, -14913)
+position = Vector2(160, -19642)
 scale = Vector2(3.968, 3.968)
 collision_layer = 8
 collision_mask = 0
@@ -2466,7 +3301,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard5" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(83, -9663)
+position = Vector2(83, -9987)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2492,7 +3327,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard6" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(233, -9818)
+position = Vector2(276, -10181)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2518,7 +3353,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard7" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(177, -9873)
+position = Vector2(220, -10236)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2544,7 +3379,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard8" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(78, -10064)
+position = Vector2(49, -10464)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2570,7 +3405,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard9" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(130, -10121)
+position = Vector2(101, -10521)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2594,6 +3429,162 @@ position = Vector2(-1, 6)
 scale = Vector2(0.84375, 0.359375)
 texture = ExtResource("7_p7x62")
 
+[node name="hard10" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(162, -11842)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard10"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard10"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard10"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard11" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(39, -12154)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard11"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard11"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard11"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard12" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(269, -12154)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard12"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard12"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard12"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard13" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(162, -12450)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard13"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard13"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard13"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard14" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(39, -12762)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard14"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard14"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard14"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
+[node name="hard15" type="Area2D" parent="move_along"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(269, -12762)
+collision_layer = 8
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="RockObs" type="Sprite2D" parent="move_along/hard15"]
+use_parent_material = true
+position = Vector2(0, -7)
+texture = ExtResource("5_pess2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/hard15"]
+position = Vector2(0, 4)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_26xyn")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/hard15"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(-1, 6)
+scale = Vector2(0.84375, 0.359375)
+texture = ExtResource("7_p7x62")
+
 [node name="boost" parent="move_along" instance=ExtResource("5_8wi4v")]
 position = Vector2(0, -43)
 
@@ -2610,7 +3601,116 @@ position = Vector2(0, -3883)
 position = Vector2(0, -6624)
 
 [node name="boost6" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -9484)
+position = Vector2(0, -9808)
+
+[node name="boost7" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -11497)
+
+[node name="boost8" parent="move_along" instance=ExtResource("5_8wi4v")]
+position = Vector2(0, -13662)
+
+[node name="DangerSign" type="Sprite2D" parent="move_along"]
+position = Vector2(227, -14261)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign8" type="Sprite2D" parent="move_along"]
+position = Vector2(270, -14196)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign9" type="Sprite2D" parent="move_along"]
+position = Vector2(275, -14066)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign11" type="Sprite2D" parent="move_along"]
+position = Vector2(275, -14130)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign10" type="Sprite2D" parent="move_along"]
+position = Vector2(278, -13911)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign12" type="Sprite2D" parent="move_along"]
+position = Vector2(278, -13986)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign13" type="Sprite2D" parent="move_along"]
+position = Vector2(278, -13749)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign14" type="Sprite2D" parent="move_along"]
+position = Vector2(278, -13824)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign15" type="Sprite2D" parent="move_along"]
+position = Vector2(48, -14066)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign16" type="Sprite2D" parent="move_along"]
+position = Vector2(48, -14130)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign21" type="Sprite2D" parent="move_along"]
+position = Vector2(48, -14197)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign22" type="Sprite2D" parent="move_along"]
+position = Vector2(35, -14262)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign23" type="Sprite2D" parent="move_along"]
+position = Vector2(29, -14308)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign17" type="Sprite2D" parent="move_along"]
+position = Vector2(51, -13911)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign18" type="Sprite2D" parent="move_along"]
+position = Vector2(51, -13986)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign19" type="Sprite2D" parent="move_along"]
+position = Vector2(51, -13749)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign20" type="Sprite2D" parent="move_along"]
+position = Vector2(51, -13824)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign2" type="Sprite2D" parent="move_along"]
+position = Vector2(215, -14316)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign3" type="Sprite2D" parent="move_along"]
+position = Vector2(201, -14358)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign4" type="Sprite2D" parent="move_along"]
+position = Vector2(181, -14381)
+texture = ExtResource("3_0b4oc")
+flip_h = true
+
+[node name="DangerSign5" type="Sprite2D" parent="move_along"]
+position = Vector2(33, -14351)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign6" type="Sprite2D" parent="move_along"]
+position = Vector2(44, -14392)
+texture = ExtResource("3_0b4oc")
+
+[node name="DangerSign7" type="Sprite2D" parent="move_along"]
+position = Vector2(64, -14434)
+texture = ExtResource("3_0b4oc")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -2628,6 +3728,7 @@ stream = ExtResource("12_mep31")
 volume_db = -80.0
 autoplay = true
 script = ExtResource("12_afxm8")
+target_db = -80.0
 
 [node name="radio_ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_11t3l")

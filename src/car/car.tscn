@@ -132,17 +132,17 @@ func _physics_process(delta: float) -> void:
 	
 	#moving input
 	var new_acc = acc
-	if abs(apply_speed) > 175.0 and sign(apply_speed) == sign(x_input):
-		new_acc/=1.5
-		if abs(apply_speed) > 200.0:
-			new_acc/=1.5
+	if abs(apply_speed) > 150.0 and sign(apply_speed) == sign(x_input):
+		new_acc/=2
+		if abs(apply_speed) > 175.0:
+			new_acc/=2
 	
 	if enable_control:
 		x_input = Input.get_axis(\"ui_left\", \"ui_right\")
 		speed += x_input * new_acc * Global.time_scale
 	
-	if sign(apply_speed) != sign(x_input) and abs(apply_speed) > 30.0 and sign(x_input) != 0:
-		$car_turn_sfx.set_target((13 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
+	if sign(apply_speed) != sign(x_input) and abs(apply_speed) > 50.0 and sign(x_input) != 0:
+		$car_turn_sfx.set_target((8 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
 	else:
 		$car_turn_sfx.set_target(-80.0)
 	
@@ -560,6 +560,7 @@ volume_db = -80.0
 pitch_scale = 0.85
 autoplay = true
 bus = &"sfx"
+playback_type = 1
 parameters/looping = true
 script = SubResource("GDScript_gevnm")
 

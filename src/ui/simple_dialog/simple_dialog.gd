@@ -41,16 +41,18 @@ const DAVID_SERIOUS = preload("res://src/ui/simple_dialog/dialog_spriteframe/dav
 func set_sequence(seq):
 	sequence = seq
 
-func execute_sequence():
+func execute_sequence(on_fail_func : Callable):
 	#print(dialog_log.has(sequence[0]))
 	
 	if (no_replay and dialog_log.has(sequence[0])): #for no replaying dialog, using first element as id
 		print("no replay bro")
-		return false
+		on_fail_func.call()
+		return
 	
 	if debug_no_dialog:
 		print("debug mode")
-		return false
+		on_fail_func.call()
+		return
 	
 	for i in range(sequence.size()):
 		if i == 0 and sequence[i] is String:
@@ -58,13 +60,13 @@ func execute_sequence():
 			continue
 		elif sequence[0] is not String:
 			"enter id in the first element"
-			return false
+			
 		
 		var seq = sequence[i] as Dictionary
 		
 		if seq.has("type") == false:
 			print("notype")
-			return false
+			return
 		
 		#print(seq["type"])
 		
@@ -91,7 +93,6 @@ func execute_sequence():
 	
 	sequence = []
 	emit_signal("sequence_finish")
-	return true
 
 func new_dialog(char_name : String, text : String, char_spr : SpriteFrames = null, glob_pos := Vector2(0, 0), target_parent = null):
 	if target_parent == null:

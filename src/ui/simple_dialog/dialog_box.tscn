@@ -259,4 +259,5 @@ label_settings = SubResource("LabelSettings_wg6oo")
 [node name="sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_re5ak")
 volume_db = -7.0
+max_polyphony = 5
 bus = &"dialog"
