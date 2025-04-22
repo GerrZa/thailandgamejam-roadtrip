@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://c1svtpi40gado"]
 
-[ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="1_5rqdl"]
+[ext_resource type="FontFile" uid="uid://uyv0ij4oedfg" path="res://asset/ui/Smol font.ttf" id="1_yaplt"]
 [ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="2_eitcn"]
 [ext_resource type="AudioStream" uid="uid://plm2cpypyr3s" path="res://asset/sound/sfx/boost_hit1.mp3" id="3_ajj15"]
 [ext_resource type="AudioStream" uid="uid://dumv5meyi7v60" path="res://asset/sound/sfx/one_hoot_car.mp3" id="4_bwpd1"]
@@ -25,20 +25,25 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_key_pressed(KEY_ENTER):
 		Global.change_scene(Global.current_scene)
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		Global.change_scene(Global.current_scene)
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_eitcn"]
-font = ExtResource("1_5rqdl")
+font = ExtResource("1_yaplt")
 font_size = 32
 font_color = Color(0.602903, 0.20568, 0.0616478, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_5rqdl"]
-font = ExtResource("1_5rqdl")
+font = ExtResource("1_yaplt")
 font_size = 8
 font_color = Color(0.22788, 0.1998, 0.27, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ajj15"]
-font = ExtResource("1_5rqdl")
+font = ExtResource("1_yaplt")
 font_color = Color(0.674055, 0.632506, 0.739964, 1)
 
 [sub_resource type="Animation" id="Animation_eitcn"]

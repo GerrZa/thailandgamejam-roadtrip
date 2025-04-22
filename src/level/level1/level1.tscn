@@ -469,7 +469,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"[shake rate=30.0 level=7 connected=1]I SAID SLOWDOWN!!![/shake]\",
+			\"text\":\"[shake rate=30.0 level=7 connected=1]DAVID!! SLOWDOWN!!![/shake]\",
 			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
 			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -601,7 +601,7 @@ func _physics_process(delta: float) -> void:
 	$button2.modulate = $button.modulate
 	
 	#dash
-	if active:
+	if active and get_tree().current_scene.get_node_or_null(\"Car\") and get_tree().current_scene.get_node_or_null(\"Car\").visible:
 		if Input.is_action_just_pressed(\"ui_right\"):
 			if press_dir == \"right\" and press_delta > 0.0:
 				press_delta = 0.0
@@ -624,6 +624,9 @@ func _physics_process(delta: float) -> void:
 			press_delta = MAX_PRESS_DELTA
 		
 		press_delta -= delta
+	
+	if active and Input.is_action_just_pressed(\"ui_down\"):
+		get_tree().change_scene_to_file(\"res://src/level/dead_scene/dead_scene.tscn\")
 
 func slow_down():
 	t_scale_target = 0.0
@@ -980,7 +983,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"Atleast we survived d@mn road.\",
+			\"text\":\"At least we survived that d@mn road.\",
 			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -988,7 +991,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"*sigh*\",
+			\"text\":\"[color=Dimgray]*sigh*\",
 			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -1004,7 +1007,7 @@ func _ready() -> void:
 		{
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I guess that is, that's the end of the road.\",
+			\"text\":\"I guess that's it, that's the end of the road.\",
 			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
 			\"glob\":Vector2(180,180),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -1028,7 +1031,7 @@ func _ready() -> void:
 		{
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"By the way, that's drive was crazy!\",
+			\"text\":\"By the way, that was crazy!\",
 			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
 			\"glob\":Vector2(180,180),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
@@ -1089,7 +1092,12 @@ func run_cutscene():
 	
 	SimpleDialog.set_sequence(cutscene7)
 	SimpleDialog.execute_sequence(func():
-		pass
+		get_tree().current_scene.start_cutscene()
+		get_tree().current_scene.get_node(\"AnimationPlayer\").play(\"end\")
+		
+		await get_tree().current_scene.get_node(\"AnimationPlayer\").animation_finished
+		
+		get_tree().current_scene.end_level()
 		)
 "
 
@@ -1368,9 +1376,9 @@ func set_instrument(instru, target):
 			$bass_music.set_target(-15.0)
 			$drum1_music.set_target(-15.0)
 		\"half-2\":
-			$bass_music.set_target(-15.0)
-			$drum1_music.set_target(-15.0)
-			$full_music.set_target(-15.0)
+			$bass_music.set_target(-25.0)
+			$drum1_music.set_target(-25.0)
+			$full_music.set_target(-25.0)
 		\"full\":
 			$bass_music.set_target(-45.0)
 			$drum1_music.set_target(-45.0)
@@ -1564,9 +1572,10 @@ material = SubResource("ShaderMaterial_rl107")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -494.0
-offset_right = 320.0
-offset_bottom = 476.0
+offset_left = -110.0
+offset_top = -526.0
+offset_right = 430.0
+offset_bottom = 508.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.360784)
@@ -4365,20 +4374,14 @@ position = Vector2(0, -425)
 [node name="boost3" parent="move_along" instance=ExtResource("5_8wi4v")]
 position = Vector2(0, -1490)
 
-[node name="boost4" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -3883)
-
 [node name="boost5" parent="move_along" instance=ExtResource("5_8wi4v")]
 position = Vector2(0, -6624)
-
-[node name="boost6" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -9808)
 
 [node name="boost7" parent="move_along" instance=ExtResource("5_8wi4v")]
 position = Vector2(0, -11497)
 
 [node name="boost8" parent="move_along" instance=ExtResource("5_8wi4v")]
-position = Vector2(0, -13662)
+position = Vector2(0, -15499)
 
 [node name="DangerSign" type="Sprite2D" parent="move_along"]
 position = Vector2(227, -14261)

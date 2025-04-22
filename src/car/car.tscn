@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cvdjeuqi55t5a"]
+[gd_scene load_steps=30 format=3 uid="uid://cvdjeuqi55t5a"]
 
 [ext_resource type="Texture2D" uid="uid://cglhuafuy61e8" path="res://asset/car/car_slice-sheet.png" id="1_6mq6v"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="3_ikygv"]
@@ -20,6 +20,7 @@ script/source = "extends Node2D
 var car_slice_text = preload(\"res://asset/car/car_slice-sheet.png\")
 
 var x_input = 0.0
+var rot_ref = 0.0
 
 var speed = 0.0
 @export var apply_speed = 0.0
@@ -172,13 +173,15 @@ func _physics_process(delta: float) -> void:
 	
 	position.x = clamp(position.x, left_wall, right_wall)
 	
-	print(apply_speed)
+	#print(apply_speed)
 	
 	#rotate car
 	for s in $SubViewport/car_slice.get_children():
 		s.rotation_degrees = lerp(s.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
 	$soft_hit.rotation_degrees = lerp($soft_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
 	$hard_hit.rotation_degrees = lerp($hard_hit.rotation_degrees, (90 * 0.75) * (apply_speed / MAX_SPEED), 0.4 * Global.time_scale)
+	
+	rot_ref = $soft_hit.rotation_degrees
 	
 	if Input.is_action_pressed(\"ui_up\") and enable_control:
 		#$car_hoot_sfx.set_target(0.0)
@@ -431,6 +434,9 @@ func set_target(target):
 	target_db = target
 "
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8607x"]
+light_mode = 1
+
 [node name="Car" type="Node2D"]
 script = SubResource("GDScript_tmscv")
 
@@ -573,5 +579,7 @@ bus = &"sfx"
 parameters/looping = true
 
 [node name="HootingIcon" type="Sprite2D" parent="."]
+z_index = 20
+material = SubResource("CanvasItemMaterial_8607x")
 position = Vector2(1, -26)
 texture = ExtResource("12_8607x")

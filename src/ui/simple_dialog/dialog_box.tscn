@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bnff0epxspqxa"]
+[gd_scene load_steps=12 format=3 uid="uid://bnff0epxspqxa"]
 
 [ext_resource type="Texture2D" uid="uid://oeyagkx2opl3" path="res://asset/ui/dialog_nine_slice.png" id="1_scjo0"]
 [ext_resource type="FontFile" uid="uid://bb6cuymwcxv2l" path="res://asset/ui/Mystery Font.ttf" id="2_jmgcx"]
 [ext_resource type="SpriteFrames" uid="uid://d2i3x1rk8ogy" path="res://src/ui/simple_dialog/dialog_spriteframe/ptt_dialog_char.tres" id="3_gj2nl"]
+[ext_resource type="FontFile" uid="uid://uyv0ij4oedfg" path="res://asset/ui/Smol font.ttf" id="3_ugoy7"]
 [ext_resource type="Texture2D" uid="uid://cly6n8nn0qa66" path="res://asset/ui/dialog_arrow_spr.png" id="4_wg6oo"]
 [ext_resource type="AudioStream" uid="uid://ca3hj5i4wiae0" path="res://asset/sound/sfx/dialog_sound2.mp3" id="5_re5ak"]
 
@@ -37,7 +38,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
-	if (Input.is_action_just_pressed(\"ui_right\") or Input.is_action_just_pressed(\"ui_left\") or Input.is_action_just_pressed(\"ui_up\") or Input.is_action_just_pressed(\"ui_down\") or Input.is_action_just_pressed(\"ui_accept\")) and least_time < 0.0 and focus:
+	if Input.is_action_just_pressed(\"ui_accept\") and least_time < 0.0 and focus:
 		if text_anim_finish == false:
 			skip_animation()
 		else:
@@ -155,7 +156,7 @@ void fragment() {
 	float pixelSizeX = 1.0 / width;
 	float pixelSizeY = 1.0 / height;
 
-	if (texture(TEXTURE, UV + vec2(-pixelSizeX, 0.0)).a > 0.0 || texture(TEXTURE, UV + vec2(0.0, -pixelSizeY)).a > 0.0){
+	if (texture(TEXTURE, UV + vec2(-pixelSizeX, -pixelSizeY)).a > 0.0){
 		if (COLOR.a < 0.5){
 			COLOR = outlineColor;
 		}
@@ -170,17 +171,18 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wg6oo"]
 shader = SubResource("Shader_gj2nl")
-shader_parameter/width = 80.0
-shader_parameter/height = 16.0
+shader_parameter/width = 90.0
+shader_parameter/height = 18.0
 shader_parameter/outlineColor = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_gj2nl"]
-font = ExtResource("2_jmgcx")
+font = ExtResource("3_ugoy7")
 font_size = 8
 font_color = Color(1, 0.92, 0.4, 1)
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
-shadow_color = Color(0, 0, 0, 0.533333)
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_wg6oo"]
 font = ExtResource("2_jmgcx")
@@ -214,7 +216,7 @@ grow_vertical = 2
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0.47, 0.337617, 0.1645, 0.235294)
 theme_override_constants/shadow_outline_size = 0
-theme_override_fonts/normal_font = ExtResource("2_jmgcx")
+theme_override_fonts/normal_font = ExtResource("3_ugoy7")
 theme_override_font_sizes/normal_font_size = 8
 bbcode_enabled = true
 text = "Lorem ipsum dolor sit amet consectetur adipiscing elit. "

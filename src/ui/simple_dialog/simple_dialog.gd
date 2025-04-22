@@ -33,6 +33,7 @@ const GRACE_NORMAL_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/
 const GRACE_SMILE_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_smile.tres")
 const GRACE_SHOCK = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_shock.tres")
 const GRACE_SERIOUS = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_serious.tres")
+const GRACE_SLEEP = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_sleep.tres")
 const DAVID_NORMAL_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_normal.tres")
 const DAVID_SMILE_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_smile.tres")
 const DAVID_SHOCK = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_shock.tres")
