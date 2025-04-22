@@ -142,7 +142,7 @@ func _physics_process(delta: float) -> void:
 		speed += x_input * new_acc * Global.time_scale
 	
 	if sign(apply_speed) != sign(x_input) and abs(apply_speed) > 50.0 and sign(x_input) != 0:
-		$car_turn_sfx.set_target((8 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
+		$car_turn_sfx.set_target(-2.0 + (5.0 * clamp((abs(apply_speed) -50.0) / (200.0 - 50.0), 0.0, 1.5)))
 	else:
 		$car_turn_sfx.set_target(-80.0)
 	
@@ -508,7 +508,7 @@ shape = SubResource("RectangleShape2D_k527v")
 debug_color = Color(0.96, 0, 0.528, 0.2)
 
 [node name="camera_control" type="Marker2D" parent="."]
-position = Vector2(0, -74)
+position = Vector2(0, -107)
 script = SubResource("GDScript_tf5ac")
 
 [node name="Camera2D" type="Camera2D" parent="camera_control"]

@@ -2,29 +2,32 @@
 
 [ext_resource type="Texture2D" uid="uid://b6kwk381ut4fb" path="res://asset/ui/dialog_face/grace_shock.png" id="1_xxcaa"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxcaa"]
+atlas = ExtResource("1_xxcaa")
+region = Rect2(18, 0, 18, 18)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ekg0c"]
 atlas = ExtResource("1_xxcaa")
-region = Rect2(16, 0, 16, 16)
+region = Rect2(36, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ic8pc"]
 atlas = ExtResource("1_xxcaa")
-region = Rect2(32, 0, 16, 16)
+region = Rect2(54, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6t6kx"]
 atlas = ExtResource("1_xxcaa")
-region = Rect2(48, 0, 16, 16)
+region = Rect2(72, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kdea8"]
 atlas = ExtResource("1_xxcaa")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3bpca"]
-atlas = ExtResource("1_xxcaa")
-region = Rect2(0, 0, 16, 16)
+region = Rect2(0, 0, 18, 18)
 
 [resource]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxcaa")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ekg0c")
 }, {
@@ -33,9 +36,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6t6kx")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kdea8")
 }],
 "loop": true,
 "name": &"say",
@@ -43,7 +43,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3bpca")
+"texture": SubResource("AtlasTexture_kdea8")
 }],
 "loop": true,
 "name": &"shut",

@@ -2,29 +2,32 @@
 
 [ext_resource type="Texture2D" uid="uid://dqkw3kqk6wssr" path="res://asset/ui/dialog_face/david_serious.png" id="1_57gva"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_57gva"]
+atlas = ExtResource("1_57gva")
+region = Rect2(18, 0, 18, 18)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_deq4c"]
 atlas = ExtResource("1_57gva")
-region = Rect2(16, 0, 16, 16)
+region = Rect2(36, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gi0k2"]
 atlas = ExtResource("1_57gva")
-region = Rect2(32, 0, 16, 16)
+region = Rect2(54, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m86m0"]
 atlas = ExtResource("1_57gva")
-region = Rect2(48, 0, 16, 16)
+region = Rect2(72, 0, 18, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4sjga"]
 atlas = ExtResource("1_57gva")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_o67gu"]
-atlas = ExtResource("1_57gva")
-region = Rect2(0, 0, 16, 16)
+region = Rect2(0, 0, 18, 18)
 
 [resource]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57gva")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_deq4c")
 }, {
@@ -33,9 +36,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m86m0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4sjga")
 }],
 "loop": true,
 "name": &"say",
@@ -43,7 +43,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_o67gu")
+"texture": SubResource("AtlasTexture_4sjga")
 }],
 "loop": true,
 "name": &"shut",
