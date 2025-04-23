@@ -33,12 +33,15 @@ var moving_speed = 0.0
 
 @export var moving = false
 
+var obs_script = preload(\"res://src/obs/regular_obs.gd\")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#ungroupping all moving object
 	for i in $move_along.get_children():
 		i.add_to_group(\"move_along\")
 		i.reparent(self)
+		i.visible = false
 	
 	#SKIPPP
 	#var test_seq = [
@@ -146,7 +149,7 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"Are you sure you know how to drive?\",
+			\"text\":\"Where are we heading to tho?\",
 			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
@@ -154,7 +157,39 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I can remember how to start the engine and nothing else.\",
+			\"text\":\"[color=Dimgray](Have you ever read my messages?)\",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(160,140),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"We're heading to \\n[wave amp=20.0 freq=5.0 connected=1][color=Dimgray][color=Royalblue]The Kapt town's hill![/color]\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(160,140),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Ohh.. that's cool, I guess.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"By the way, are you sure you know how to drive?\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"All I could remember is how to start the engine and nothing else.\",
 			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
 			\"glob\":Vector2(160,140),
 			\"target\":$main_ui
@@ -255,6 +290,11 @@ func _physics_process(delta: float) -> void:
 	if moving:
 		for o in get_tree().get_nodes_in_group(\"move_along\"):
 			o.position.y += moving_speed * delta * moving_scale * Global.time_scale
+			if o.position.y >= -100:
+				o.visible = true
+			
+			if o.position.y > 650:
+				o.queue_free()
 	
 	if moving_scale < 0.01 and get_node_or_null(\"Car\") == null:
 		get_tree().change_scene_to_file(\"res://src/level/dead_scene/dead_scene.tscn\")
@@ -1094,6 +1134,7 @@ func run_cutscene():
 	SimpleDialog.execute_sequence(func():
 		get_tree().current_scene.start_cutscene()
 		get_tree().current_scene.get_node(\"AnimationPlayer\").play(\"end\")
+		get_tree().current_scene.get_node(\"music_player\").set_instrument(\"none\", -7.0)
 		
 		await get_tree().current_scene.get_node(\"AnimationPlayer\").animation_finished
 		
@@ -1122,6 +1163,10 @@ size = Vector2(32.2239, 100.636)
 [sub_resource type="GDScript" id="GDScript_txphl"]
 script/source = "extends Area2D
 
+
+func _ready() -> void:
+	visible = false
+	$VisibleOnScreenEnabler2D2.connect(\"screen_entered\",func():visible = true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
@@ -1341,7 +1386,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.05)
+	#volume_db = lerp(volume_db, target_db, 0.05)
+	volume_db = move_toward(volume_db, target_db, 1.0)
 
 func set_target(target):
 	target_db = target
@@ -1380,8 +1426,8 @@ func set_instrument(instru, target):
 			$drum1_music.set_target(-25.0)
 			$full_music.set_target(-25.0)
 		\"full\":
-			$bass_music.set_target(-45.0)
-			$drum1_music.set_target(-45.0)
+			$bass_music.set_target(-30.0)
+			$drum1_music.set_target(-30.0)
 			$full_music.set_target(target)
 		\"none\":
 			$bass_music.set_target(-70.0)
@@ -1403,7 +1449,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.1)
+	#volume_db = lerp(volume_db, target_db, 0.1)
+	volume_db = move_toward(volume_db, target_db, 1.0)
 
 func set_target(target):
 	target_db = target
@@ -3492,6 +3539,35 @@ texture = ExtResource("7_p7x62")
 [node name="VisibleOnScreenEnabler2D2" type="VisibleOnScreenEnabler2D" parent="move_along/soft46"]
 position = Vector2(1, 7)
 
+[node name="soft99" type="Area2D" parent="move_along"]
+position = Vector2(128, -11335)
+collision_layer = 4
+collision_mask = 0
+script = SubResource("GDScript_txphl")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft99"]
+position = Vector2(2, -6.5)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("RectangleShape2D_26xyn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft99"]
+position = Vector2(2, -10)
+texture = ExtResource("12_3dty0")
+hframes = 3
+frame = 2
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft99"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(2, -11)
+scale = Vector2(0.3125, 0.500001)
+texture = ExtResource("7_p7x62")
+
+[node name="VisibleOnScreenEnabler2D2" type="VisibleOnScreenEnabler2D" parent="move_along/soft99"]
+position = Vector2(1, 7)
+
 [node name="soft47" type="Area2D" parent="move_along"]
 position = Vector2(74, -11285)
 collision_layer = 4
@@ -4263,7 +4339,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard16" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(155, -20932)
+position = Vector2(155, -20857)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -4289,7 +4365,7 @@ texture = ExtResource("7_p7x62")
 
 [node name="hard17" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(174, -20920)
+position = Vector2(174, -20845)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true

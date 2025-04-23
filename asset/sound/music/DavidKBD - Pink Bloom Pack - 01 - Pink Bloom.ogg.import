@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ddde423pchqdf"
+path="res://.godot/imported/DavidKBD - Pink Bloom Pack - 01 - Pink Bloom.ogg-f7ddfefbdf1c9efb65f83d2e87bd2d9e.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/sound/music/DavidKBD - Pink Bloom Pack - 01 - Pink Bloom.ogg"
+dest_files=["res://.godot/imported/DavidKBD - Pink Bloom Pack - 01 - Pink Bloom.ogg-f7ddfefbdf1c9efb65f83d2e87bd2d9e.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bxata0h8lnimi"]
+[gd_scene load_steps=39 format=3 uid="uid://bxata0h8lnimi"]
 
 [ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="1_tp26p"]
 [ext_resource type="Texture2D" uid="uid://b34ku6xgsmvha" path="res://asset/level/level2/level2-d1.png" id="2_bcxcn"]
@@ -7,16 +7,17 @@
 [ext_resource type="PackedScene" uid="uid://cvdjeuqi55t5a" path="res://src/car/car.tscn" id="4_57oj7"]
 [ext_resource type="Texture2D" uid="uid://db8ddvsum83tt" path="res://asset/level/level2/level2-d3.png" id="4_84ttx"]
 [ext_resource type="Script" uid="uid://b4papt04hl7kd" path="res://src/car/camera_2d.gd" id="5_8vkhf"]
-[ext_resource type="Texture2D" uid="uid://do7w1rhh1luad" path="res://asset/level/level1/blocker_obs.png" id="10_4qybn"]
+[ext_resource type="Texture2D" uid="uid://d3qskbrgabchs" path="res://asset/level/level2/light_shape_2.png" id="6_e26hg"]
+[ext_resource type="Texture2D" uid="uid://dyxohw2o6kv8j" path="res://asset/level/level2/bush.png" id="8_e26hg"]
 [ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="11_dr142"]
 [ext_resource type="Shader" uid="uid://dnj0ccl48ntu4" path="res://src/shader/pulse_color.gdshader" id="12_e2wcn"]
 [ext_resource type="Texture2D" uid="uid://b0mkvp12h024h" path="res://asset/level/level1/rock_obs.png" id="13_0qmxl"]
+[ext_resource type="Texture2D" uid="uid://crvyqc0q8ypkr" path="res://asset/level/level2/granny.png" id="14_h5shy"]
 [ext_resource type="PackedScene" uid="uid://c3r0y08y1jx01" path="res://src/etc/boost.tscn" id="14_vfpnx"]
 [ext_resource type="AudioStream" uid="uid://e4c0pi4n5heg" path="res://asset/sound/ambient/car_ambient.mp3" id="15_ysqev"]
 [ext_resource type="AudioStream" uid="uid://c6n7i3m1775po" path="res://asset/sound/ambient/car_driving_sfx.mp3" id="16_66m2t"]
 [ext_resource type="AudioStream" uid="uid://bqp6hrjcruuas" path="res://asset/sound/ambient/forest_ambient.mp3" id="17_e26hg"]
 [ext_resource type="Script" uid="uid://phvnha2mw3yo" path="res://src/level/level1/car_driving_ambient.gd" id="17_w5x8x"]
-[ext_resource type="Texture2D" uid="uid://ckmlxk7hj4uf7" path="res://asset/level/level2/light_shape.png" id="18_84ttx"]
 [ext_resource type="AudioStream" uid="uid://d4ityubxilpbk" path="res://asset/sound/music/edited_bass.mp3" id="19_0y7nj"]
 [ext_resource type="AudioStream" uid="uid://dqjknde55ufic" path="res://asset/sound/music/edited_drum1.mp3" id="20_tac2d"]
 
@@ -35,6 +36,7 @@ func _ready() -> void:
 	for i in $move_along.get_children():
 		i.add_to_group(\"move_along\")
 		i.reparent(self)
+		i.visible = false
 	
 	#SKIPPP
 	#var test_seq = [
@@ -99,14 +101,6 @@ func _ready() -> void:
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
 		},
-		{ 
-			\"type\":\"dialog\",
-			\"char\":\"David\",
-			\"text\":\"[color=Dimgray]. . .\",
-			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
-			\"glob\":Vector2(180,180),
-			\"target\":$main_ui
-		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
@@ -155,6 +149,118 @@ func _ready() -> void:
 			\"glob\":Vector2(180,180),
 			\"target\":$main_ui
 		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Isn't been a while since we're here???\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Yeah, but..\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"First, the car seem to slow down a little, but didn't completely stop.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"And second, I think we're lost.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Jeez...\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"So what are you planning to do now?\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Guess we have to wait until morning so that we can see the path clearly.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"In the mean time, I'll just try figuring out the way out.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"But it's really weird.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"I don't think the path we're taking here even exist in the map.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(180,180),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Weird.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Well, let me put some music on, it's getting really creepy now.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\" . . . \",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"I guess it's broke.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
 		{
 			\"type\":\"dialogfunc\",
 			\"func\":\"clear_dialog\"
@@ -191,12 +297,17 @@ func _physics_process(delta: float) -> void:
 		$car_driving_ambient.target_db = -80.0
 	
 	$bg1.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale)
-	$bg2.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale * 0.75)
-	$bg3.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale * 0.5)
+	$bg2.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale * 1.25)
+	$bg3.autoscroll = Vector2(0, moving_speed * moving_scale * Global.time_scale * 1.5)
 	
 	if moving:
 		for o in get_tree().get_nodes_in_group(\"move_along\"):
 			o.position.y += moving_speed * delta * moving_scale * Global.time_scale
+			if o.position.y >= -100:
+				o.visible = true
+			
+			if o.position.y > 650:
+				o.queue_free()
 	
 	if moving_scale < 0.01 and get_node_or_null(\"Car\") == null:
 		get_tree().change_scene_to_file(\"res://src/level/dead_scene/dead_scene.tscn\")
@@ -230,7 +341,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	rotation_degrees = lerp(rotation_degrees,get_parent().rot_ref,0.3)
+	rotation_degrees = lerp(rotation_degrees,get_parent().rot_ref,0.1)
 "
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_84ttx"]
@@ -260,26 +371,110 @@ func _ready() -> void:
 			\"func\":\"start_cutscene\",
 			\"arg\":[]
 		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"radio_ambient\"),
-			\"func\":\"set_target\",
-			\"arg\":[-20.0]
-		},
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"Hey! Why are you speeding!?\",
-			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"text\":\"[color=Dimgray] . . . \",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
 			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"I'm not????\",
-			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"text\":\"[color=Dimgray] . . . \",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
 			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Let's not talk about it...\",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
+			\"glob\":Vector2(60,160),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Y..Ye..Yeah...\",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"[color=Dimgray] . . . \",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[color=Dimgray] . . . \",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
+			\"glob\":Vector2(60,160),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"Car\"),
+			\"func\":\"accelerate\",
+			\"arg\":[]
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"H..Hey.. David!? What are you doing?\",
+			\"spr_frame\":SimpleDialog.GRACE_SERIOUS,
+			\"glob\":Vector2(60,160),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"[color=Dimgray] . . . \",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"Car\"),
+			\"func\":\"accelerate\",
+			\"arg\":[]
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"Car\"),
+			\"func\":\"accelerate\",
+			\"arg\":[]
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[shake rate=20.0 level=5 connected=1]DAVID!!!!\",
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,160),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"[shake rate=20.0 level=5 connected=1]I'M NOT GONNA STAY IN THE WOOD WITH THAT THING, OK!!??!!?!\",
+			\"spr_frame\":SimpleDialog.DAVID_SHOCK,
+			\"glob\":Vector2(180,180),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"[shake rate=20.0 level=5 connected=1]ARGG!!!!!!!\",
+			\"spr_frame\":SimpleDialog.GRACE_SHOCK,
+			\"glob\":Vector2(60,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
 		{
@@ -311,7 +506,7 @@ func run_cutscene():
 size = Vector2(321, 52)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6phvn"]
-radius = 46.0341
+radius = 23.0761
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8wi4v"]
 shader = ExtResource("11_dr142")
@@ -324,6 +519,19 @@ shader_parameter/freq = 5.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pess2"]
 radius = 28.9671
+
+[sub_resource type="GDScript" id="GDScript_h5shy"]
+script/source = "extends Area2D
+
+func _physics_process(delta: float) -> void:
+	modulate.a = lerp(modulate.a, 0.0, 0.1)
+	
+	if modulate.a <= 0.001:
+		queue_free()
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g84o1"]
+radius = 13.0
 
 [sub_resource type="Animation" id="Animation_pess2"]
 length = 0.001
@@ -423,7 +631,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	volume_db = lerp(volume_db, target_db, 0.05)
+	volume_db = move_toward(volume_db, target_db, 1.0)
 
 func set_target(target):
 	target_db = target
@@ -509,7 +717,7 @@ color = Color(0.3555, 0.45, 0.4374, 1)
 
 [node name="Car" parent="." instance=ExtResource("4_57oj7")]
 position = Vector2(160, 267)
-can_dash = false
+main_speed = 50
 init_enable_cam = false
 left_wall = 80.0
 right_wall = 240.0
@@ -520,8 +728,10 @@ script = SubResource("GDScript_84ttx")
 [node name="PointLight2D" type="PointLight2D" parent="Car/light"]
 show_behind_parent = true
 position = Vector2(0, -115)
+color = Color(1, 0.868343, 0.755411, 1)
+energy = 1.5
 shadow_enabled = true
-texture = ExtResource("18_84ttx")
+texture = ExtResource("6_e26hg")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Car/light"]
 occluder = SubResource("OccluderPolygon2D_84ttx")
@@ -537,7 +747,7 @@ script = ExtResource("5_8vkhf")
 script = SubResource("GDScript_pess2")
 
 [node name="cutscene_2" type="Area2D" parent="move_along"]
-position = Vector2(0, 517)
+position = Vector2(0, -2058)
 collision_layer = 0
 script = SubResource("GDScript_p7x62")
 metadata/_edit_group_ = true
@@ -547,31 +757,93 @@ position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
-[node name="soft" type="Area2D" parent="move_along"]
-position = Vector2(239, -1929)
+[node name="soft2" type="Area2D" parent="move_along"]
+position = Vector2(123, -404)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft2"]
 scale = Vector2(1.08615, 0.606152)
 shape = SubResource("CircleShape2D_6phvn")
 
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft"]
-position = Vector2(2, -10)
-texture = ExtResource("10_4qybn")
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft2"]
+position = Vector2(0, -9)
+texture = ExtResource("8_e26hg")
 
-[node name="shadow" type="Sprite2D" parent="move_along/soft"]
+[node name="shadow" type="Sprite2D" parent="move_along/soft2"]
 modulate = Color(0, 0, 0, 0.25098)
 z_index = -10
 material = SubResource("ShaderMaterial_8wi4v")
-position = Vector2(1, -2)
-scale = Vector2(0.84375, 0.4375)
+scale = Vector2(0.390625, 0.210648)
+texture = ExtResource("3_ca64c")
+
+[node name="soft6" type="Area2D" parent="move_along"]
+position = Vector2(198, -535)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft6"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft6"]
+position = Vector2(0, -9)
+texture = ExtResource("8_e26hg")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft6"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+scale = Vector2(0.390625, 0.210648)
+texture = ExtResource("3_ca64c")
+
+[node name="soft3" type="Area2D" parent="move_along"]
+position = Vector2(123, -666)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft3"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft3"]
+position = Vector2(0, -9)
+texture = ExtResource("8_e26hg")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft3"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+scale = Vector2(0.390625, 0.210648)
+texture = ExtResource("3_ca64c")
+
+[node name="soft7" type="Area2D" parent="move_along"]
+position = Vector2(198, -797)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft7"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_6phvn")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft7"]
+position = Vector2(0, -9)
+texture = ExtResource("8_e26hg")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft7"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+scale = Vector2(0.390625, 0.210648)
 texture = ExtResource("3_ca64c")
 
 [node name="hard" type="Area2D" parent="move_along"]
 material = SubResource("ShaderMaterial_11t3l")
-position = Vector2(157, -3012)
+position = Vector2(157, -4552)
 collision_layer = 8
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -595,8 +867,28 @@ position = Vector2(-1, 6)
 scale = Vector2(0.84375, 0.359375)
 texture = ExtResource("3_ca64c")
 
+[node name="granny" type="Area2D" parent="move_along"]
+position = Vector2(157, -1689)
+collision_layer = 0
+collision_mask = 0
+script = SubResource("GDScript_h5shy")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/granny"]
+shape = SubResource("CircleShape2D_g84o1")
+
+[node name="Granny" type="Sprite2D" parent="move_along/granny"]
+position = Vector2(0, -15)
+texture = ExtResource("14_h5shy")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="move_along/granny"]
+position = Vector2(0, -102)
+
 [node name="boost" parent="move_along" instance=ExtResource("14_vfpnx")]
-position = Vector2(0, -704)
+position = Vector2(0, -195)
+
+[node name="boost2" parent="move_along" instance=ExtResource("14_vfpnx")]
+position = Vector2(0, -1020)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

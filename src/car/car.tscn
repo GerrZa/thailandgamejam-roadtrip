@@ -309,7 +309,7 @@ void fragment() {
 	float pixelSizeY = 1.0 / height;
 
 	if (COLOR.a > 0.0 && UV.y >= 1.0 - progress){
-		COLOR = mix(COLOR, vec4(1,1,1,0.3), 0.2 + (0.5 * progress));
+		COLOR = mix(COLOR, vec4(1), 1.0);
 	}
 
 	COLOR = mix(COLOR, vec4(1,0.25,0.25,COLOR.a), 0.5 * redIntense);

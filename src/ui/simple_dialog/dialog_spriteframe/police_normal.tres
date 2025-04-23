@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://cbjg1xevv7cjd"]
+
+[ext_resource type="Texture2D" uid="uid://glbuowif82ov" path="res://asset/ui/dialog_face/police_normal.png" id="1_rqjt5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmg45"]
+atlas = ExtResource("1_rqjt5")
+region = Rect2(18, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r27qh"]
+atlas = ExtResource("1_rqjt5")
+region = Rect2(36, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4h7h"]
+atlas = ExtResource("1_rqjt5")
+region = Rect2(54, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yg5x"]
+atlas = ExtResource("1_rqjt5")
+region = Rect2(72, 0, 18, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ndpof"]
+atlas = ExtResource("1_rqjt5")
+region = Rect2(0, 0, 18, 18)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmg45")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r27qh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4h7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yg5x")
+}],
+"loop": true,
+"name": &"say",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ndpof")
+}],
+"loop": true,
+"name": &"shut",
+"speed": 5.0
+}]

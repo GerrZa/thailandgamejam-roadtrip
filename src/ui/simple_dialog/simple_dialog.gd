@@ -39,6 +39,8 @@ const DAVID_SMILE_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/d
 const DAVID_SHOCK = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_shock.tres")
 const DAVID_SERIOUS = preload("res://src/ui/simple_dialog/dialog_spriteframe/david_serious.tres")
 
+const POLICE_NORMAL= preload("res://src/ui/simple_dialog/dialog_spriteframe/police_normal.tres")
+
 func set_sequence(seq):
 	sequence = seq
 
