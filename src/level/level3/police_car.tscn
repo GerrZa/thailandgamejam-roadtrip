@@ -108,6 +108,7 @@ _data = {
 script = SubResource("GDScript_igdbo")
 
 [node name="car" type="Area2D" parent="."]
+z_index = 1
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -124,3 +125,11 @@ centered = false
 libraries = {
 &"": SubResource("AnimationLibrary_w7eqv")
 }
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1
+offset_left = -22.0
+offset_top = -487.0
+offset_right = 21.0
+offset_bottom = 40.0
+color = Color(1, 0, 0, 0.282353)

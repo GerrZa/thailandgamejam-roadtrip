@@ -26,7 +26,7 @@ enum DialogFuncList {
 
 signal sequence_finish
 
-var debug_no_dialog = false
+var debug_no_dialog = true
 
 #sprite_frame
 const GRACE_NORMAL_SPR = preload("res://src/ui/simple_dialog/dialog_spriteframe/grace_normal.tres")
