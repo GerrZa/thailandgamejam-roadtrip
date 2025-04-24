@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://b84areg284y4p"]
+[gd_scene load_steps=56 format=3 uid="uid://b84areg284y4p"]
 
 [ext_resource type="PackedScene" uid="uid://dros6l4jtv2l1" path="res://src/ui/main_ui.tscn" id="1_cbpuk"]
 [ext_resource type="Texture2D" uid="uid://c7erfxagvc83h" path="res://asset/level/level3/level3.png" id="2_bbku6"]
@@ -43,6 +43,11 @@ func _ready() -> void:
 		i.visible = false
 
 	var level1_seq1 = [\"3-start\",
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"fadein\"
+		},
 		{
 			\"type\":\"animation\",
 			\"animplayer\":$AnimationPlayer,
@@ -141,13 +146,18 @@ func _ready() -> void:
 	
 	SimpleDialog.set_sequence(level1_seq1)
 	SimpleDialog.execute_sequence(func():
+		$AnimationPlayer.play(\"fadein\")
+		
+		await $AnimationPlayer.animation_finished
+		
 		$AnimationPlayer.play(\"start\")
+		
+		get_tree().current_scene.get_node(\"music_player\").play()
+		get_tree().current_scene.get_node(\"music_player\").set_target(-15.0)
 		
 		await $AnimationPlayer.animation_finished
 		
 		end_cutscene()
-		get_tree().current_scene.get_node(\"music_player\").play()
-		get_tree().current_scene.get_node(\"music_player\").set_target(-15.0)
 )
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -190,6 +200,20 @@ func end_cutscene():
 	moving = true
 	$Car.enable_control = true
 	$Car.enable_camera()
+
+func to_credit():
+	get_tree().change_scene_to_file(\"res://src/level/end_level/end_scene.tscn\")
+"
+
+[sub_resource type="GDScript" id="GDScript_u8p5f"]
+script/source = "extends Node2D
+
+@export var active = false
+@export var glob_y = 0.0
+
+func _physics_process(delta: float) -> void:
+	if active:
+		get_parent().global_position.y = glob_y
 "
 
 [sub_resource type="GDScript" id="GDScript_pess2"]
@@ -268,12 +292,6 @@ func _ready() -> void:
 			\"glob\":Vector2(50,220),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
 		},
-		{
-			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player\"),
-			\"func\":\"set_target\",
-			\"arg\":[-50.0]
-		},
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
@@ -290,12 +308,6 @@ func _ready() -> void:
 		},
 		{
 			\"type\":\"manipulate\",
-			\"node\":get_tree().current_scene.get_node(\"music_player2\"),
-			\"func\":\"set_target\",
-			\"arg\":[-20.0]
-		},
-		{
-			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene.get_node(\"music_player\"),
 			\"func\":\"set_target\",
 			\"arg\":[-50.0]
@@ -304,7 +316,7 @@ func _ready() -> void:
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene.get_node(\"music_player2\"),
 			\"func\":\"set_target\",
-			\"arg\":[-30.0]
+			\"arg\":[-35.0]
 		},
 		{ 
 			\"type\":\"dialog\",
@@ -313,6 +325,12 @@ func _ready() -> void:
 			\"spr_frame\":SimpleDialog.POLICE_NORMAL,
 			\"glob\":Vector2(210,160),
 			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"music_player2\"),
+			\"func\":\"set_target\",
+			\"arg\":[-30.0]
 		},
 		{ 
 			\"type\":\"dialog\",
@@ -411,6 +429,85 @@ func run_cutscene():
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7x62"]
 size = Vector2(321, 52)
+
+[sub_resource type="GDScript" id="GDScript_om22j"]
+script/source = "extends Area2D
+
+var cutscene3
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	cutscene3 = [\"3-3\",
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"start_cutscene\",
+			\"arg\":[]
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Right there! The road to the hill!\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(30,120),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{ 
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Alrighty!\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(50,220),
+			\"target\":get_tree().current_scene.get_node(\"main_ui\")
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"music_player2\"),
+			\"func\":\"set_target\",
+			\"arg\":[-55.0]
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"music_player\"),
+			\"func\":\"set_target\",
+			\"arg\":[-55.0]
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"animation\",
+			\"animplayer\":get_tree().current_scene.get_node(\"AnimationPlayer\"),
+			\"animname\":\"speedup_end\"
+		},
+		{
+			\"type\":\"animation\",
+			\"animplayer\":get_tree().current_scene.get_node(\"AnimationPlayer\"),
+			\"animname\":\"fadeout\"
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene,
+			\"func\":\"to_credit\",
+			\"arg\":[]
+		}
+	]
+	
+	
+	connect(\"area_entered\", func(area) : run_cutscene())
+
+func run_cutscene():
+	
+	print(\"run cutscene\")
+	
+	SimpleDialog.set_sequence(cutscene3)
+	SimpleDialog.execute_sequence(func():
+		get_tree().current_scene.get_node(\"music_player\").set_target(-70.0)
+		get_tree().current_scene.get_node(\"music_player2\").play()
+		get_tree().current_scene.get_node(\"music_player2\").set_target(-15.0)
+		)
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11t3l"]
 shader = ExtResource("11_84sit")
@@ -542,7 +639,8 @@ func spawn_police():
 	
 	if get_tree().current_scene.get_node_or_null(\"Car\"):
 		randomize()
-		car_ins.position.x = randf_range(50.0, 270.0)
+		#car_ins.global_position.x = randf_range(50.0, 270.0)
+		car_ins.global_position.x = global_position.x
 		car_ins.position.y = 320
 	else:
 		return
@@ -551,7 +649,7 @@ func spawn_police():
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u8p5f"]
-size = Vector2(320, 38)
+size = Vector2(1488, 38)
 
 [sub_resource type="Animation" id="Animation_pess2"]
 length = 0.001
@@ -590,6 +688,42 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("main_ui/ColorRect:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Car/animation_y_pos:glob_y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [267.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Car/animation_y_pos:active")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_6phvn"]
@@ -633,9 +767,101 @@ tracks/2/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_om22j"]
+resource_name = "speedup_end"
+length = 4.2
+step = 0.1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Car")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"disable_camera"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Car/animation_y_pos:glob_y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.9, 3.1),
+"transitions": PackedFloat32Array(1, 3.73213, 1),
+"update": 0,
+"values": [267.0, 267.0, -30.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Car/animation_y_pos:active")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
+[sub_resource type="Animation" id="Animation_u8p5f"]
+resource_name = "fadein"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Car:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(160, 586)]
+}
+
+[sub_resource type="Animation" id="Animation_wycfl"]
+resource_name = "fadeout"
+length = 1.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pess2"]
 _data = {
 &"RESET": SubResource("Animation_pess2"),
+&"fadein": SubResource("Animation_u8p5f"),
+&"fadeout": SubResource("Animation_wycfl"),
+&"speedup_end": SubResource("Animation_om22j"),
 &"start": SubResource("Animation_6phvn")
 }
 
@@ -684,6 +910,14 @@ script = SubResource("GDScript_j8foc")
 
 [node name="main_ui" parent="." instance=ExtResource("1_cbpuk")]
 
+[node name="ColorRect" type="ColorRect" parent="main_ui"]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.77163, 0.7209, 0.89, 1)
+
 [node name="bg1" type="Parallax2D" parent="."]
 z_index = -99
 repeat_size = Vector2(320, 640)
@@ -704,6 +938,11 @@ init_enable_cam = false
 left_wall = 50.0
 right_wall = 270.0
 
+[node name="animation_y_pos" type="Node2D" parent="Car"]
+script = SubResource("GDScript_u8p5f")
+active = true
+glob_y = 267.0
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 160)
 drag_left_margin = 1.0
@@ -721,6 +960,17 @@ script = SubResource("GDScript_p7x62")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_2"]
+position = Vector2(160.5, 0)
+shape = SubResource("RectangleShape2D_p7x62")
+debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
+
+[node name="cutscene_3" type="Area2D" parent="move_along"]
+position = Vector2(0, -16584)
+collision_layer = 0
+script = SubResource("GDScript_om22j")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/cutscene_3"]
 position = Vector2(160.5, 0)
 shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
@@ -2845,7 +3095,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big43" type="Area2D" parent="move_along"]
-position = Vector2(239, -3544)
+position = Vector2(245, -3544)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2868,7 +3118,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big44" type="Area2D" parent="move_along"]
-position = Vector2(239, -3572)
+position = Vector2(245, -3572)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2891,7 +3141,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big45" type="Area2D" parent="move_along"]
-position = Vector2(239, -3599)
+position = Vector2(245, -3599)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2914,7 +3164,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big46" type="Area2D" parent="move_along"]
-position = Vector2(239, -3627)
+position = Vector2(245, -3627)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2937,7 +3187,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big47" type="Area2D" parent="move_along"]
-position = Vector2(239, -3655)
+position = Vector2(245, -3655)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -2960,7 +3210,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big48" type="Area2D" parent="move_along"]
-position = Vector2(239, -3682)
+position = Vector2(245, -3682)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -3029,7 +3279,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big81" type="Area2D" parent="move_along"]
-position = Vector2(239, -3716)
+position = Vector2(245, -3716)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -3052,7 +3302,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big82" type="Area2D" parent="move_along"]
-position = Vector2(239, -3743)
+position = Vector2(245, -3743)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -4248,7 +4498,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big89" type="Area2D" parent="move_along"]
-position = Vector2(239, -3771)
+position = Vector2(245, -3771)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -4271,7 +4521,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big90" type="Area2D" parent="move_along"]
-position = Vector2(239, -3798)
+position = Vector2(245, -3798)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -4961,7 +5211,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big205" type="Area2D" parent="move_along"]
-position = Vector2(81, -13107)
+position = Vector2(81, -13104)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5007,7 +5257,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big207" type="Area2D" parent="move_along"]
-position = Vector2(89, -13130)
+position = Vector2(89, -13127)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5030,7 +5280,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big208" type="Area2D" parent="move_along"]
-position = Vector2(244, -13116)
+position = Vector2(244, -13113)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5053,7 +5303,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big209" type="Area2D" parent="move_along"]
-position = Vector2(106, -13157)
+position = Vector2(106, -13154)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5076,7 +5326,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big210" type="Area2D" parent="move_along"]
-position = Vector2(256, -13147)
+position = Vector2(256, -13144)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5628,7 +5878,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big182" type="Area2D" parent="move_along"]
-position = Vector2(262, -13288)
+position = Vector2(262, -13301)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5651,7 +5901,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big211" type="Area2D" parent="move_along"]
-position = Vector2(275, -13260)
+position = Vector2(275, -13273)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5674,7 +5924,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big212" type="Area2D" parent="move_along"]
-position = Vector2(276, -13225)
+position = Vector2(278, -13236)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5697,7 +5947,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big213" type="Area2D" parent="move_along"]
-position = Vector2(274, -13199)
+position = Vector2(274, -13201)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5720,7 +5970,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big214" type="Area2D" parent="move_along"]
-position = Vector2(265, -13168)
+position = Vector2(265, -13165)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5743,7 +5993,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big183" type="Area2D" parent="move_along"]
-position = Vector2(231, -13357)
+position = Vector2(231, -13370)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5766,7 +6016,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big184" type="Area2D" parent="move_along"]
-position = Vector2(220, -13380)
+position = Vector2(217, -13397)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5789,7 +6039,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big185" type="Area2D" parent="move_along"]
-position = Vector2(247, -13320)
+position = Vector2(247, -13333)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5812,7 +6062,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big186" type="Area2D" parent="move_along"]
-position = Vector2(129, -13279)
+position = Vector2(129, -13292)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5835,7 +6085,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big187" type="Area2D" parent="move_along"]
-position = Vector2(135, -13247)
+position = Vector2(135, -13260)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5858,7 +6108,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big188" type="Area2D" parent="move_along"]
-position = Vector2(129, -13219)
+position = Vector2(129, -13227)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5881,7 +6131,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big189" type="Area2D" parent="move_along"]
-position = Vector2(118, -13192)
+position = Vector2(118, -13194)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5904,7 +6154,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big190" type="Area2D" parent="move_along"]
-position = Vector2(122, -13310)
+position = Vector2(122, -13323)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5927,7 +6177,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big191" type="Area2D" parent="move_along"]
-position = Vector2(109, -13345)
+position = Vector2(109, -13358)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5950,7 +6200,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big192" type="Area2D" parent="move_along"]
-position = Vector2(93, -13376)
+position = Vector2(93, -13389)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5973,7 +6223,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big193" type="Area2D" parent="move_along"]
-position = Vector2(76, -13410)
+position = Vector2(76, -13423)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -5996,7 +6246,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big194" type="Area2D" parent="move_along"]
-position = Vector2(313, -13500)
+position = Vector2(313, -13513)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6019,7 +6269,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big195" type="Area2D" parent="move_along"]
-position = Vector2(303, -13524)
+position = Vector2(303, -13537)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6042,7 +6292,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big196" type="Area2D" parent="move_along"]
-position = Vector2(289, -13552)
+position = Vector2(289, -13565)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6065,7 +6315,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big197" type="Area2D" parent="move_along"]
-position = Vector2(272, -13576)
+position = Vector2(272, -13589)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6088,7 +6338,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big198" type="Area2D" parent="move_along"]
-position = Vector2(136, -13448)
+position = Vector2(136, -13461)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6111,7 +6361,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big199" type="Area2D" parent="move_along"]
-position = Vector2(105, -13431)
+position = Vector2(105, -13444)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6134,7 +6384,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big200" type="Area2D" parent="move_along"]
-position = Vector2(165, -13467)
+position = Vector2(165, -13480)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6157,7 +6407,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big201" type="Area2D" parent="move_along"]
-position = Vector2(147, -13493)
+position = Vector2(147, -13506)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6180,7 +6430,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big202" type="Area2D" parent="move_along"]
-position = Vector2(131, -13513)
+position = Vector2(131, -13526)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6203,7 +6453,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big203" type="Area2D" parent="move_along"]
-position = Vector2(112, -13535)
+position = Vector2(112, -13548)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6226,7 +6476,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big204" type="Area2D" parent="move_along"]
-position = Vector2(87, -13556)
+position = Vector2(87, -13569)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6248,26 +6498,1752 @@ position = Vector2(-0.5, -1.19209e-07)
 scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
-[node name="soft_long" type="Area2D" parent="move_along"]
-position = Vector2(183, -114)
+[node name="soft_big235" type="Area2D" parent="move_along"]
+position = Vector2(42, -14851)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big235"]
 scale = Vector2(1.08615, 0.606152)
-shape = SubResource("CircleShape2D_2va71")
+shape = SubResource("CircleShape2D_21trl")
 
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long"]
-position = Vector2(0, -12)
-texture = ExtResource("13_21trl")
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big235"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
 
-[node name="shadow" type="Sprite2D" parent="move_along/soft_long"]
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big235"]
 modulate = Color(0, 0, 0, 0.25098)
 z_index = -10
 material = SubResource("ShaderMaterial_pwb1y")
-position = Vector2(0, -1.19209e-07)
-scale = Vector2(0.1875, 0.09375)
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big236" type="Area2D" parent="move_along"]
+position = Vector2(211, -14845)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big236"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big236"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big236"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big237" type="Area2D" parent="move_along"]
+position = Vector2(63, -14878)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big237"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big237"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big237"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big238" type="Area2D" parent="move_along"]
+position = Vector2(213, -14876)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big238"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big238"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big238"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big239" type="Area2D" parent="move_along"]
+position = Vector2(82, -14900)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big239"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big239"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big239"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big240" type="Area2D" parent="move_along"]
+position = Vector2(224, -14898)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big240"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big240"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big240"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big241" type="Area2D" parent="move_along"]
+position = Vector2(102, -14922)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big241"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big241"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big241"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big242" type="Area2D" parent="move_along"]
+position = Vector2(236, -14922)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big242"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big242"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big242"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big243" type="Area2D" parent="move_along"]
+position = Vector2(123, -14949)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big243"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big243"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big243"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big244" type="Area2D" parent="move_along"]
+position = Vector2(256, -14946)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big244"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big244"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big244"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big245" type="Area2D" parent="move_along"]
+position = Vector2(135, -14975)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big245"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big245"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big245"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big246" type="Area2D" parent="move_along"]
+position = Vector2(266, -14975)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big246"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big246"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big246"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big247" type="Area2D" parent="move_along"]
+position = Vector2(137, -15008)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big247"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big247"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big247"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big248" type="Area2D" parent="move_along"]
+position = Vector2(268, -15008)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big248"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big248"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big248"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big249" type="Area2D" parent="move_along"]
+position = Vector2(136, -15038)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big249"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big249"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big249"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big250" type="Area2D" parent="move_along"]
+position = Vector2(267, -15038)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big250"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big250"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big250"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big251" type="Area2D" parent="move_along"]
+position = Vector2(130, -15066)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big251"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big251"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big251"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big252" type="Area2D" parent="move_along"]
+position = Vector2(267, -15066)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big252"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big252"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big252"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big253" type="Area2D" parent="move_along"]
+position = Vector2(118, -15096)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big253"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big253"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big253"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big254" type="Area2D" parent="move_along"]
+position = Vector2(260, -15096)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big254"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big254"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big254"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big265" type="Area2D" parent="move_along"]
+position = Vector2(44, -15249)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big265"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big265"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big265"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big266" type="Area2D" parent="move_along"]
+position = Vector2(177, -15249)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big266"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big266"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big266"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big267" type="Area2D" parent="move_along"]
+position = Vector2(46, -15280)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big267"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big267"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big267"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big268" type="Area2D" parent="move_along"]
+position = Vector2(179, -15280)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big268"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big268"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big268"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big269" type="Area2D" parent="move_along"]
+position = Vector2(45, -15311)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big269"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big269"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big269"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big270" type="Area2D" parent="move_along"]
+position = Vector2(178, -15311)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big270"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big270"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big270"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big271" type="Area2D" parent="move_along"]
+position = Vector2(45, -15341)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big271"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big271"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big271"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big272" type="Area2D" parent="move_along"]
+position = Vector2(178, -15341)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big272"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big272"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big272"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big255" type="Area2D" parent="move_along"]
+position = Vector2(111, -15127)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big255"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big255"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big255"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big256" type="Area2D" parent="move_along"]
+position = Vector2(247, -15127)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big256"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big256"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big256"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big257" type="Area2D" parent="move_along"]
+position = Vector2(90, -15152)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big257"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big257"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big257"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big258" type="Area2D" parent="move_along"]
+position = Vector2(227, -15154)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big258"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big258"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big258"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big259" type="Area2D" parent="move_along"]
+position = Vector2(65, -15172)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big259"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big259"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big259"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big260" type="Area2D" parent="move_along"]
+position = Vector2(213, -15174)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big260"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big260"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big260"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big261" type="Area2D" parent="move_along"]
+position = Vector2(52, -15194)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big261"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big261"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big261"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big262" type="Area2D" parent="move_along"]
+position = Vector2(197, -15194)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big262"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big262"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big262"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big263" type="Area2D" parent="move_along"]
+position = Vector2(46, -15218)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big263"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big263"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big263"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big264" type="Area2D" parent="move_along"]
+position = Vector2(183, -15220)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big264"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big264"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big264"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big273" type="Area2D" parent="move_along"]
+position = Vector2(49, -15378)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big273"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big273"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big273"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big274" type="Area2D" parent="move_along"]
+position = Vector2(191, -15379)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big274"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big274"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big274"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big275" type="Area2D" parent="move_along"]
+position = Vector2(63, -15406)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big275"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big275"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big275"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big276" type="Area2D" parent="move_along"]
+position = Vector2(205, -15406)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big276"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big276"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big276"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big277" type="Area2D" parent="move_along"]
+position = Vector2(82, -15437)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big277"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big277"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big277"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big278" type="Area2D" parent="move_along"]
+position = Vector2(227, -15437)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big278"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big278"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big278"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big279" type="Area2D" parent="move_along"]
+position = Vector2(104, -15467)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big279"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big279"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big279"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big280" type="Area2D" parent="move_along"]
+position = Vector2(248, -15464)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big280"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big280"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big280"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big281" type="Area2D" parent="move_along"]
+position = Vector2(126, -15497)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big281"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big281"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big281"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big282" type="Area2D" parent="move_along"]
+position = Vector2(260, -15496)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big282"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big282"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big282"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big283" type="Area2D" parent="move_along"]
+position = Vector2(143, -15524)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big283"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big283"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big283"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big284" type="Area2D" parent="move_along"]
+position = Vector2(266, -15528)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big284"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big284"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big284"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big285" type="Area2D" parent="move_along"]
+position = Vector2(143, -15554)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big285"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big285"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big285"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big286" type="Area2D" parent="move_along"]
+position = Vector2(268, -15554)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big286"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big286"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big286"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big287" type="Area2D" parent="move_along"]
+position = Vector2(142, -15583)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big287"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big287"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big287"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big288" type="Area2D" parent="move_along"]
+position = Vector2(267, -15583)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big288"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big288"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big288"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big289" type="Area2D" parent="move_along"]
+position = Vector2(142, -15616)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big289"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big289"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big289"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big290" type="Area2D" parent="move_along"]
+position = Vector2(267, -15616)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big290"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big290"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big290"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big291" type="Area2D" parent="move_along"]
+position = Vector2(131, -15650)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big291"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big291"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big291"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big292" type="Area2D" parent="move_along"]
+position = Vector2(265, -15653)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big292"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big292"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big292"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big293" type="Area2D" parent="move_along"]
+position = Vector2(44, -15844)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big293"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big293"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big293"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big294" type="Area2D" parent="move_along"]
+position = Vector2(169, -15844)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big294"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big294"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big294"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big295" type="Area2D" parent="move_along"]
+position = Vector2(45, -15868)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big295"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big295"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big295"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big296" type="Area2D" parent="move_along"]
+position = Vector2(170, -15868)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big296"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big296"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big296"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big297" type="Area2D" parent="move_along"]
+position = Vector2(44, -15899)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big297"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big297"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big297"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big298" type="Area2D" parent="move_along"]
+position = Vector2(169, -15899)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big298"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big298"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big298"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big299" type="Area2D" parent="move_along"]
+position = Vector2(44, -15927)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big299"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big299"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big299"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big300" type="Area2D" parent="move_along"]
+position = Vector2(169, -15927)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big300"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big300"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big300"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big301" type="Area2D" parent="move_along"]
+position = Vector2(122, -15683)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big301"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big301"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big301"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big302" type="Area2D" parent="move_along"]
+position = Vector2(247, -15683)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big302"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big302"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big302"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big303" type="Area2D" parent="move_along"]
+position = Vector2(100, -15718)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big303"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big303"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big303"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big304" type="Area2D" parent="move_along"]
+position = Vector2(225, -15718)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big304"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big304"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big304"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big305" type="Area2D" parent="move_along"]
+position = Vector2(79, -15750)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big305"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big305"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big305"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big306" type="Area2D" parent="move_along"]
+position = Vector2(204, -15750)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big306"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big306"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big306"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big307" type="Area2D" parent="move_along"]
+position = Vector2(64, -15780)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big307"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big307"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big307"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big308" type="Area2D" parent="move_along"]
+position = Vector2(189, -15780)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big308"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big308"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big308"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big309" type="Area2D" parent="move_along"]
+position = Vector2(46, -15809)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big309"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big309"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big309"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_big310" type="Area2D" parent="move_along"]
+position = Vector2(177, -15811)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_big310"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_21trl")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_big310"]
+position = Vector2(-17, -30)
+texture = ExtResource("12_pwb1y")
+centered = false
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_big310"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(-0.5, -1.19209e-07)
+scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long4" type="Area2D" parent="move_along"]
@@ -6535,7 +8511,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long25" type="Area2D" parent="move_along"]
-position = Vector2(239, -3514)
+position = Vector2(245, -3514)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6557,7 +8533,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long26" type="Area2D" parent="move_along"]
-position = Vector2(278, -3514)
+position = Vector2(284, -3514)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6579,7 +8555,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big37" type="Area2D" parent="move_along"]
-position = Vector2(81, -3941)
+position = Vector2(75, -3941)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6602,7 +8578,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big38" type="Area2D" parent="move_along"]
-position = Vector2(81, -3969)
+position = Vector2(75, -3969)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6625,7 +8601,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big39" type="Area2D" parent="move_along"]
-position = Vector2(81, -3996)
+position = Vector2(75, -3996)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6648,7 +8624,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big40" type="Area2D" parent="move_along"]
-position = Vector2(81, -4024)
+position = Vector2(75, -4024)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6671,7 +8647,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big41" type="Area2D" parent="move_along"]
-position = Vector2(81, -4052)
+position = Vector2(75, -4052)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6694,7 +8670,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big42" type="Area2D" parent="move_along"]
-position = Vector2(81, -4079)
+position = Vector2(75, -4079)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6855,7 +8831,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big83" type="Area2D" parent="move_along"]
-position = Vector2(81, -4113)
+position = Vector2(75, -4113)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6878,7 +8854,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big84" type="Area2D" parent="move_along"]
-position = Vector2(81, -4140)
+position = Vector2(75, -4140)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6947,7 +8923,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big91" type="Area2D" parent="move_along"]
-position = Vector2(81, -4165)
+position = Vector2(75, -4165)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -6970,7 +8946,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big92" type="Area2D" parent="move_along"]
-position = Vector2(81, -4192)
+position = Vector2(75, -4192)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7083,7 +9059,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long29" type="Area2D" parent="move_along"]
-position = Vector2(44, -3911)
+position = Vector2(38, -3911)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7105,7 +9081,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long30" type="Area2D" parent="move_along"]
-position = Vector2(82, -3911)
+position = Vector2(76, -3911)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7573,7 +9549,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big61" type="Area2D" parent="move_along"]
-position = Vector2(239, -4339)
+position = Vector2(245, -4339)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7596,7 +9572,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big62" type="Area2D" parent="move_along"]
-position = Vector2(239, -4367)
+position = Vector2(245, -4367)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7619,7 +9595,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big63" type="Area2D" parent="move_along"]
-position = Vector2(239, -4394)
+position = Vector2(245, -4394)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7642,7 +9618,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big64" type="Area2D" parent="move_along"]
-position = Vector2(239, -4422)
+position = Vector2(245, -4422)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7665,7 +9641,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big65" type="Area2D" parent="move_along"]
-position = Vector2(239, -4450)
+position = Vector2(245, -4450)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7688,7 +9664,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big66" type="Area2D" parent="move_along"]
-position = Vector2(239, -4477)
+position = Vector2(245, -4477)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7757,7 +9733,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big97" type="Area2D" parent="move_along"]
-position = Vector2(239, -4511)
+position = Vector2(245, -4511)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7780,7 +9756,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big98" type="Area2D" parent="move_along"]
-position = Vector2(239, -4538)
+position = Vector2(245, -4538)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7849,7 +9825,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big101" type="Area2D" parent="move_along"]
-position = Vector2(239, -4566)
+position = Vector2(245, -4566)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7872,7 +9848,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big102" type="Area2D" parent="move_along"]
-position = Vector2(239, -4593)
+position = Vector2(245, -4593)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -7983,7 +9959,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long37" type="Area2D" parent="move_along"]
-position = Vector2(239, -4309)
+position = Vector2(245, -4309)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8005,7 +9981,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long38" type="Area2D" parent="move_along"]
-position = Vector2(278, -4309)
+position = Vector2(284, -4309)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8027,7 +10003,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big67" type="Area2D" parent="move_along"]
-position = Vector2(87, -4744)
+position = Vector2(81, -4744)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8050,7 +10026,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big68" type="Area2D" parent="move_along"]
-position = Vector2(87, -4772)
+position = Vector2(81, -4772)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8073,7 +10049,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big69" type="Area2D" parent="move_along"]
-position = Vector2(87, -4799)
+position = Vector2(81, -4799)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8096,7 +10072,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big70" type="Area2D" parent="move_along"]
-position = Vector2(87, -4827)
+position = Vector2(81, -4827)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8119,7 +10095,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big71" type="Area2D" parent="move_along"]
-position = Vector2(87, -4855)
+position = Vector2(81, -4855)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8142,7 +10118,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big72" type="Area2D" parent="move_along"]
-position = Vector2(87, -4882)
+position = Vector2(81, -4882)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8303,7 +10279,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big103" type="Area2D" parent="move_along"]
-position = Vector2(87, -4916)
+position = Vector2(81, -4916)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8326,7 +10302,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big104" type="Area2D" parent="move_along"]
-position = Vector2(87, -4943)
+position = Vector2(81, -4943)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8395,7 +10371,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big107" type="Area2D" parent="move_along"]
-position = Vector2(87, -4968)
+position = Vector2(81, -4968)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8418,7 +10394,7 @@ scale = Vector2(0.273438, 0.140625)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_big108" type="Area2D" parent="move_along"]
-position = Vector2(87, -4995)
+position = Vector2(81, -4995)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8531,7 +10507,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long41" type="Area2D" parent="move_along"]
-position = Vector2(50, -4714)
+position = Vector2(44, -4714)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8553,7 +10529,7 @@ scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
 [node name="soft_long42" type="Area2D" parent="move_along"]
-position = Vector2(88, -4714)
+position = Vector2(82, -4714)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
@@ -8816,21 +10792,70 @@ position = Vector2(0, -1.19209e-07)
 scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
-[node name="soft_long2" type="Area2D" parent="move_along"]
-position = Vector2(222, -114)
+[node name="soft_crosswalker14" type="Node2D" parent="move_along"]
+physics_interpolation_mode = 1
+position = Vector2(50, -7423)
+metadata/_edit_group_ = true
+
+[node name="hard_move" type="Area2D" parent="move_along/soft_crosswalker14"]
+material = SubResource("ShaderMaterial_11t3l")
+position = Vector2(9, 29)
+collision_layer = 8
+collision_mask = 0
+script = SubResource("GDScript_s33y8")
+metadata/_edit_group_ = true
+
+[node name="grannyObs" type="Sprite2D" parent="move_along/soft_crosswalker14/hard_move"]
+use_parent_material = true
+position = Vector2(0.305708, 0.0819121)
+texture = ExtResource("12_wefwl")
+centered = false
+offset = Vector2(-17, -41)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="move_along/soft_crosswalker14/hard_move/grannyObs"]
+libraries = {
+&"": SubResource("AnimationLibrary_21trl")
+}
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_crosswalker14/hard_move"]
+position = Vector2(3, -3)
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_pess2")
+debug_color = Color(0.881451, 0.248053, 0.579309, 0.42)
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_crosswalker14/hard_move"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_8wi4v")
+position = Vector2(7.56979e-06, 0)
+scale = Vector2(0.265625, 0.109375)
+texture = ExtResource("10_c1pwq")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="move_along/soft_crosswalker14/hard_move"]
+position = Vector2(3, 5)
+scale = Vector2(1, 2.6)
+
+[node name="crosswalk" type="Sprite2D" parent="move_along/soft_crosswalker14"]
+z_index = -10
+texture = ExtResource("11_s33y8")
+centered = false
+
+[node name="soft_long47" type="Area2D" parent="move_along"]
+position = Vector2(183, -7362)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long47"]
 scale = Vector2(1.08615, 0.606152)
 shape = SubResource("CircleShape2D_2va71")
 
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long2"]
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long47"]
 position = Vector2(0, -12)
 texture = ExtResource("13_21trl")
 
-[node name="shadow" type="Sprite2D" parent="move_along/soft_long2"]
+[node name="shadow" type="Sprite2D" parent="move_along/soft_long47"]
 modulate = Color(0, 0, 0, 0.25098)
 z_index = -10
 material = SubResource("ShaderMaterial_pwb1y")
@@ -8838,21 +10863,43 @@ position = Vector2(0, -1.19209e-07)
 scale = Vector2(0.1875, 0.09375)
 texture = ExtResource("10_c1pwq")
 
-[node name="soft_long3" type="Area2D" parent="move_along"]
-position = Vector2(256, -114)
+[node name="soft_long50" type="Area2D" parent="move_along"]
+position = Vector2(222, -7362)
 collision_layer = 4
 collision_mask = 0
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long50"]
 scale = Vector2(1.08615, 0.606152)
 shape = SubResource("CircleShape2D_2va71")
 
-[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long3"]
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long50"]
 position = Vector2(0, -12)
 texture = ExtResource("13_21trl")
 
-[node name="shadow" type="Sprite2D" parent="move_along/soft_long3"]
+[node name="shadow" type="Sprite2D" parent="move_along/soft_long50"]
+modulate = Color(0, 0, 0, 0.25098)
+z_index = -10
+material = SubResource("ShaderMaterial_pwb1y")
+position = Vector2(0, -1.19209e-07)
+scale = Vector2(0.1875, 0.09375)
+texture = ExtResource("10_c1pwq")
+
+[node name="soft_long55" type="Area2D" parent="move_along"]
+position = Vector2(256, -7362)
+collision_layer = 4
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/soft_long55"]
+scale = Vector2(1.08615, 0.606152)
+shape = SubResource("CircleShape2D_2va71")
+
+[node name="BlockerObs" type="Sprite2D" parent="move_along/soft_long55"]
+position = Vector2(0, -12)
+texture = ExtResource("13_21trl")
+
+[node name="shadow" type="Sprite2D" parent="move_along/soft_long55"]
 modulate = Color(0, 0, 0, 0.25098)
 z_index = -10
 material = SubResource("ShaderMaterial_pwb1y")
@@ -8870,13 +10917,10 @@ position = Vector2(0, -1582)
 position = Vector2(0, -3354)
 
 [node name="boost4" parent="move_along" instance=ExtResource("13_ktr7g")]
-position = Vector2(0, -7400)
-
-[node name="boost6" parent="move_along" instance=ExtResource("13_ktr7g")]
-position = Vector2(0, -7531)
+position = Vector2(0, -7565)
 
 [node name="police_spawner" type="Area2D" parent="move_along"]
-position = Vector2(0, -7858)
+position = Vector2(160, -7858)
 collision_layer = 0
 script = SubResource("GDScript_vuvp6")
 metadata/_edit_group_ = true
@@ -8886,7 +10930,7 @@ position = Vector2(160, 0)
 shape = SubResource("RectangleShape2D_u8p5f")
 
 [node name="police_spawner2" type="Area2D" parent="move_along"]
-position = Vector2(0, -8281)
+position = Vector2(57, -8281)
 collision_layer = 0
 script = SubResource("GDScript_vuvp6")
 metadata/_edit_group_ = true
@@ -8896,7 +10940,7 @@ position = Vector2(160, 0)
 shape = SubResource("RectangleShape2D_u8p5f")
 
 [node name="police_spawner3" type="Area2D" parent="move_along"]
-position = Vector2(0, -8774)
+position = Vector2(263, -8281)
 collision_layer = 0
 script = SubResource("GDScript_vuvp6")
 metadata/_edit_group_ = true
@@ -8905,23 +10949,23 @@ metadata/_edit_group_ = true
 position = Vector2(160, 0)
 shape = SubResource("RectangleShape2D_u8p5f")
 
-[node name="police_spawner4" type="Area2D" parent="move_along"]
-position = Vector2(0, -12214)
+[node name="police_spawner8" type="Area2D" parent="move_along"]
+position = Vector2(218, -13468)
 collision_layer = 0
 script = SubResource("GDScript_vuvp6")
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/police_spawner4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/police_spawner8"]
 position = Vector2(160, 0)
 shape = SubResource("RectangleShape2D_u8p5f")
 
-[node name="police_spawner5" type="Area2D" parent="move_along"]
-position = Vector2(0, -13248)
+[node name="police_spawner10" type="Area2D" parent="move_along"]
+position = Vector2(96, -14022)
 collision_layer = 0
 script = SubResource("GDScript_vuvp6")
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/police_spawner5"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="move_along/police_spawner10"]
 position = Vector2(160, 0)
 shape = SubResource("RectangleShape2D_u8p5f")
 
@@ -8972,12 +11016,13 @@ libraries = {
 
 [node name="ambient_player" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_utsly")
-volume_db = -10.0
+volume_db = -80.0
 autoplay = true
 script = SubResource("GDScript_afxm8")
 
 [node name="car_driving_ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_e5sq3")
+volume_db = -80.0
 autoplay = true
 script = ExtResource("16_fah0v")
 

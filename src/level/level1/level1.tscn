@@ -614,7 +614,7 @@ script/source = "extends Area2D
 var t_scale_target = 1.0
 
 var press_delta = 0.0
-var MAX_PRESS_DELTA = 0.15
+var MAX_PRESS_DELTA = 0.23
 var press_dir = \"none\"
 
 var target_fade_trans = 0.0
@@ -1109,6 +1109,18 @@ func _ready() -> void:
 			\"node\":get_tree().current_scene.get_node(\"music_player\"),
 			\"func\":\"set_instrument\",
 			\"arg\":[\"none\", -7.0]
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"ambient_player\"),
+			\"func\":\"set_target\",
+			\"arg\":[\"none\", -70.0]
+		},
+		{
+			\"type\":\"manipulate\",
+			\"node\":get_tree().current_scene.get_node(\"car_driving_ambient\"),
+			\"func\":\"set_target\",
+			\"arg\":[\"none\", -70.0]
 		},
 		{
 			\"type\":\"animation\",

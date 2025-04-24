@@ -36,7 +36,7 @@ var debug_x_pos = 0.0
 
 var press_delta = 0.0
 var press_dir = \"none\"
-var MAX_PRESS_DELTA = 0.15
+var MAX_PRESS_DELTA = 0.23
 
 var DEF_DASH_CD = 1.2
 var dash_cd = 0.0
@@ -112,7 +112,7 @@ func _physics_process(delta: float) -> void:
 	
 	#dash
 	if Input.is_action_just_pressed(\"ui_right\") and Input.is_action_pressed(\"ui_left\") == false and enable_control:
-		if press_dir == \"right\" and press_delta > 0.0 and dash_cd < 0.0:
+		if press_dir == \"right\" and press_delta > 0.0 and press_delta < 0.17 and dash_cd < 0.0:
 			press_delta = 0.0
 			#dash_cd = DEF_DASH_CD
 			dash()
@@ -120,7 +120,7 @@ func _physics_process(delta: float) -> void:
 		press_dir = \"right\"
 		press_delta = MAX_PRESS_DELTA
 	elif Input.is_action_just_pressed(\"ui_left\") and Input.is_action_pressed(\"ui_right\") == false and enable_control:
-		if press_dir == \"left\" and press_delta > 0.0 and dash_cd < 0.0:
+		if press_dir == \"left\" and press_delta > 0.0 and press_delta < 0.17 and dash_cd < 0.0:
 			press_delta = 0.0
 			#dash_cd = DEF_DASH_CD
 			dash()

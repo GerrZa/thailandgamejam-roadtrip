@@ -1,9 +1,26 @@
-[gd_scene load_steps=11 format=3 uid="uid://duqtt81h77dl0"]
+[gd_scene load_steps=12 format=3 uid="uid://duqtt81h77dl0"]
 
-[ext_resource type="Texture2D" uid="uid://wf26b7xbyu5f" path="res://asset/car/car_slice.png" id="1_qvp31"]
+[ext_resource type="Texture2D" uid="uid://cglhuafuy61e8" path="res://asset/car/car_slice-sheet.png" id="1_4mmhm"]
 [ext_resource type="Shader" uid="uid://dch6ui5g2x52e" path="res://src/shader/outline.gdshader" id="2_j2trx"]
 [ext_resource type="Shader" uid="uid://djffngelxs6pn" path="res://src/shader/circle_sprite.gdshader" id="3_4mmhm"]
 [ext_resource type="Texture2D" uid="uid://ixgn5gtkhr8q" path="res://icon.svg" id="4_ia8cg"]
+
+[sub_resource type="GDScript" id="GDScript_4mmhm"]
+script/source = "extends Node2D
+
+@export var rot = 0.0
+
+func _ready() -> void:
+	var j = 0
+	
+	for i in $SubViewport/car_parent.get_children():
+		i.position.y = - j
+		i.rotation_degrees = rot
+		
+		j+=1
+	
+	$car_shadow.rotation_degrees = rot
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ucc0p"]
 shader = ExtResource("2_j2trx")
@@ -56,6 +73,7 @@ _data = {
 shader = ExtResource("3_4mmhm")
 
 [node name="Mockcar" type="Node2D"]
+script = SubResource("GDScript_4mmhm")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
@@ -65,92 +83,107 @@ size = Vector2i(48, 48)
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
 offset = Vector2(0, -4)
 
-[node name="CarSlice" type="Sprite2D" parent="SubViewport"]
+[node name="car_parent" type="Node2D" parent="SubViewport"]
+
+[node name="CarSlice" type="Sprite2D" parent="SubViewport/car_parent"]
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 
-[node name="CarSlice2" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice2" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -1)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 1
 
-[node name="CarSlice3" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice3" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -2)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 2
 
-[node name="CarSlice4" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice4" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -3)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 3
 
-[node name="CarSlice5" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice5" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -4)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 4
 
-[node name="CarSlice6" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice6" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -5)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 5
 
-[node name="CarSlice7" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice7" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -6)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 6
 
-[node name="CarSlice8" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice8" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -7)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 7
 
-[node name="CarSlice9" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice9" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -8)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 8
 
-[node name="CarSlice10" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice10" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -9)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 9
 
-[node name="CarSlice11" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice11" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -10)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 10
 
-[node name="CarSlice12" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice12" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -11)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 11
 
-[node name="CarSlice13" type="Sprite2D" parent="SubViewport"]
+[node name="CarSlice13" type="Sprite2D" parent="SubViewport/car_parent"]
 position = Vector2(0, -12)
 rotation = 3.14159
-texture = ExtResource("1_qvp31")
+texture = ExtResource("1_4mmhm")
+flip_v = true
 hframes = 13
 frame = 12
 
@@ -169,6 +202,6 @@ libraries = {
 modulate = Color(0, 0, 0, 0.219608)
 z_index = -1
 material = SubResource("ShaderMaterial_lsjg7")
-position = Vector2(0, 2)
-scale = Vector2(0.171875, 0.257813)
+position = Vector2(0, 1)
+scale = Vector2(0.1875, 0.281251)
 texture = ExtResource("4_ia8cg")

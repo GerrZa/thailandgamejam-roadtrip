@@ -1,0 +1,606 @@
+[gd_scene load_steps=12 format=3 uid="uid://b2rskgm4ml4fs"]
+
+[ext_resource type="FontFile" uid="uid://uyv0ij4oedfg" path="res://asset/ui/Smol font.ttf" id="1_f2nme"]
+[ext_resource type="Texture2D" uid="uid://cx66nvgwi5y4h" path="res://asset/level/end_lvl/end_scene_bg_2.png" id="1_jsq5o"]
+[ext_resource type="Texture2D" uid="uid://dssgxvrj17owv" path="res://asset/level/end_lvl/david_and_grace.png" id="3_f2nme"]
+[ext_resource type="AudioStream" uid="uid://dbkxwwxvisjfp" path="res://asset/sound/ambient/hill_ambient.mp3" id="3_jsq5o"]
+[ext_resource type="AudioStream" uid="uid://dr15yt8cgigse" path="res://asset/sound/music/Galaxy Guppy ko0x.mp3" id="4_idgij"]
+
+[sub_resource type="GDScript" id="GDScript_jsq5o"]
+script/source = "extends Node2D
+
+func _ready() -> void:
+	var end_cutscene = [\"end-2\",
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"start\"
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Ahhh..\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(200,140),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"We're finally here. Don't we?\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,110),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Yeah..\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(40,130),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Sorry for all these mess.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(40,130),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"It's alright.\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"It's kinda fun, actually.\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Really?\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Yeah.\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Wow..\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Glad you like it.\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Umm.. Hey Grace.\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Hmm?\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Do you really think this is fun right?\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Yeah.\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"How about we.. umm.. go on a trip like this again sometimes?\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Hmmm...\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Yeah! I'd love that! <3\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Oh great!\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"cool.\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"By the way, what about your car?\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Do you really wanna ride that thing back?\",
+			\"spr_frame\":SimpleDialog.DAVID_SERIOUS,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Nope, buuuut, how would we get home then?\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Hmmmm...\",
+			\"spr_frame\":SimpleDialog.DAVID_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"David\",
+			\"text\":\"Bus?\",
+			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"Bus.\",
+			\"spr_frame\":SimpleDialog.GRACE_SMILE_SPR,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"fade_out\"
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"???\",
+			\"text\":\"D@mnnnnn!!!\",
+			\"spr_frame\":null,
+			\"glob\":Vector2(200,200),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"???\",
+			\"text\":\"FREE CAR!!!\",
+			\"spr_frame\":null,
+			\"glob\":Vector2(60,160),
+			\"target\":$main_ui
+		},
+		{
+			\"type\":\"dialogfunc\",
+			\"func\":\"clear_dialog\"
+		},
+		{
+			\"type\":\"animation\",
+			\"animplayer\":$AnimationPlayer,
+			\"animname\":\"credit\"
+		}
+	]
+	
+	SimpleDialog.set_sequence(end_cutscene)
+	SimpleDialog.execute_sequence(func():pass)
+"
+
+[sub_resource type="Animation" id="Animation_u8o1s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("main_ui/credit/holder:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("main_ui/credit/holder:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 59)]
+}
+
+[sub_resource type="Animation" id="Animation_sdpoq"]
+resource_name = "start"
+length = 3.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.6),
+"transitions": PackedFloat32Array(0.378929, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-154, -33)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-80.0, -15.0]
+}
+
+[sub_resource type="Animation" id="Animation_f2nme"]
+resource_name = "fade_out"
+length = 2.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-15.0, -80.0]
+}
+
+[sub_resource type="Animation" id="Animation_idgij"]
+resource_name = "credit"
+length = 37.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/credit/holder:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1, 4.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("music")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("main_ui/credit/holder:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 9.5, 37),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 59), Vector2(0, 59), Vector2(0, -763)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vyghv"]
+_data = {
+&"RESET": SubResource("Animation_u8o1s"),
+&"credit": SubResource("Animation_idgij"),
+&"fade_out": SubResource("Animation_f2nme"),
+&"start": SubResource("Animation_sdpoq")
+}
+
+[node name="EndScene" type="Node2D"]
+script = SubResource("GDScript_jsq5o")
+
+[node name="main_ui" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="main_ui"]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0, 0, 0, 1)
+
+[node name="credit" type="ColorRect" parent="main_ui"]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0, 0, 0, 0)
+
+[node name="holder" type="Node2D" parent="main_ui/credit"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, 59)
+
+[node name="thx" type="RichTextLabel" parent="main_ui/credit/holder"]
+offset_top = 82.0
+offset_right = 320.0
+offset_bottom = 104.0
+theme_override_constants/line_separation = 2
+theme_override_fonts/normal_font = ExtResource("1_f2nme")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "[wave amp=15.0 freq=5.0 connected=0][rainbow sat=0.3]Thanks for playing[/rainbow][/wave]"
+horizontal_alignment = 1
+
+[node name="credit" type="RichTextLabel" parent="main_ui/credit/holder"]
+offset_top = 101.0
+offset_right = 320.0
+offset_bottom = 1117.0
+theme_override_constants/line_separation = 1
+theme_override_fonts/normal_font = ExtResource("1_f2nme")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "
+A game by trizG [img]res://asset/level/end_lvl/credit_triz.png[/img]
+
+A submission for Thailand summer jam 2025 - Roadtrip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[color=pink]Special Thanks <3[/color]
+
+David KDB - Song asset
+[color=dimgray]( https://davidkbd.itch.io )[/color]
+
+KitKat Sound - Song asset
+[color=dimgray]( www.kitkitsound.com )[/color]
+
+ko0x - Song asset
+[color=dimgray]( www.soundcloud.com/ko0x)[/color]
+
+
+[color=yellow]Songs Used[/color]
+
+[color=Cornflower]Level1[/color]
+BrakeTagg - KitKat Sound
+
+
+[color=Cornflower]Level2[/color]
+DavidKBD - InterstellarPack - Spiral of Plasma
+
+
+[color=Cornflower]Level3[/color]
+DavidKBD - Pink Bloom Pack - Pink Bloom
+DavidKBD - InterstellarPack - Plasma Storm
+
+[color=Cornflower]Credit Scene[/color]
+ko0x - Galaxy Guppy
+
+
+[color=yellow]Programmer[/color]
+trizG
+
+
+[color=yellow]Game Design[/color]
+trizG
+
+
+[color=yellow]Level Design[/color]
+trizG
+[color=Dimgray](again)[/color]
+
+[color=yellow]Art & Story[/color]
+trizG
+[color=Dimgray](again)[/color]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thanks for playing!"
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(1, 0.81, 0.8575, 1)
+
+[node name="EndSceneBg1" type="Sprite2D" parent="."]
+z_index = -99
+position = Vector2(-160, -118)
+texture = ExtResource("1_jsq5o")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vyghv")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_jsq5o")
+volume_db = -80.0
+autoplay = true
+parameters/looping = true
+
+[node name="music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_idgij")
+volume_db = -10.0
+
+[node name="DavidAndGrace" type="Sprite2D" parent="."]
+position = Vector2(-28, 111)
+texture = ExtResource("3_f2nme")
+centered = false
