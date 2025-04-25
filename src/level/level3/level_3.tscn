@@ -76,7 +76,7 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"We're finally here!\",
+			\"text\":\"We're out of that creepy woods!\",
 			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(180,180),
 			\"target\":$main_ui
@@ -90,7 +90,7 @@ func _ready() -> void:
 		{ 
 			\"type\":\"dialog\",
 			\"char\":\"David\",
-			\"text\":\"We just have to pass through this town and we can finally chillout at...\",
+			\"text\":\"All we have to do is pass through this town and we can finally chillout at...\",
 			\"spr_frame\":SimpleDialog.DAVID_SMILE_SPR,
 			\"glob\":Vector2(180,180),
 			\"target\":$main_ui
@@ -464,13 +464,13 @@ func _ready() -> void:
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene.get_node(\"music_player2\"),
 			\"func\":\"set_target\",
-			\"arg\":[-55.0]
+			\"arg\":[-75.0]
 		},
 		{
 			\"type\":\"manipulate\",
 			\"node\":get_tree().current_scene.get_node(\"music_player\"),
 			\"func\":\"set_target\",
-			\"arg\":[-55.0]
+			\"arg\":[-75.0]
 		},
 		{
 			\"type\":\"dialogfunc\",
@@ -726,45 +726,50 @@ tracks/5/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_6phvn"]
-resource_name = "start"
-length = 2.4
+[sub_resource type="Animation" id="Animation_u8p5f"]
+resource_name = "fadein"
+length = 1.1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Car:position")
+tracks/0/path = NodePath("main_ui/ColorRect:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.9),
-"transitions": PackedFloat32Array(-1.8025, 1),
+"times": PackedFloat32Array(0, 1.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(160, 355), Vector2(160, 267)]
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Car:enable_control")
+tracks/1/path = NodePath("Car:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(160, 586)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:moving")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+
+[sub_resource type="Animation" id="Animation_wycfl"]
+resource_name = "fadeout"
+length = 1.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_om22j"]
@@ -810,50 +815,45 @@ tracks/2/keys = {
 "values": [true, true]
 }
 
-[sub_resource type="Animation" id="Animation_u8p5f"]
-resource_name = "fadein"
-length = 1.1
+[sub_resource type="Animation" id="Animation_6phvn"]
+resource_name = "start"
+length = 2.4
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("main_ui/ColorRect:color")
+tracks/0/path = NodePath("Car:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 1.9),
+"transitions": PackedFloat32Array(-1.8025, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+"values": [Vector2(160, 355), Vector2(160, 267)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Car:position")
+tracks/1/path = NodePath("Car:enable_control")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(160, 586)]
+"update": 1,
+"values": [false]
 }
-
-[sub_resource type="Animation" id="Animation_wycfl"]
-resource_name = "fadeout"
-length = 1.6
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("main_ui/ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:moving")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pess2"]
@@ -965,7 +965,7 @@ shape = SubResource("RectangleShape2D_p7x62")
 debug_color = Color(0.812233, 0.407972, 0.10435, 0.42)
 
 [node name="cutscene_3" type="Area2D" parent="move_along"]
-position = Vector2(0, -16584)
+position = Vector2(0, -16228)
 collision_layer = 0
 script = SubResource("GDScript_om22j")
 metadata/_edit_group_ = true

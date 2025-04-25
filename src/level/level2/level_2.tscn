@@ -212,7 +212,15 @@ func _ready() -> void:
 		{ #########################
 			\"type\":\"dialog\",
 			\"char\":\"Grace\",
-			\"text\":\"I guess it's broke.\",
+			\"text\":\"Huh\",
+			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
+			\"glob\":Vector2(60,120),
+			\"target\":$main_ui
+		},
+		{ #########################
+			\"type\":\"dialog\",
+			\"char\":\"Grace\",
+			\"text\":\"I think it's broken.\",
 			\"spr_frame\":SimpleDialog.GRACE_NORMAL_SPR,
 			\"glob\":Vector2(60,120),
 			\"target\":$main_ui
